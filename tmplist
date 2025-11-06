@@ -1,0 +1,12 @@
+---
+- name: List files in /tmp
+  hosts: myamh
+  gather_facts: false
+  tasks:
+    - name: Run ls on /tmp
+      ansible.builtin.command: ls -l /tmp
+      register: tmp_files
+
+    - name: Show files in /tmp
+      ansible.builtin.debug:
+        var: tmp_files.stdout_lines
