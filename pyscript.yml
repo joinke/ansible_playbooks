@@ -6,7 +6,7 @@
     script_name: "/tmp/script.py"   # default value
   tasks:
     - name: Execute Python script
-      ansible.builtin.command: python3 {{ script_name }}
+      ansible.builtin.command: python3 -u {{ script_name }}
       register: script_output
 
     - name: Show script output
