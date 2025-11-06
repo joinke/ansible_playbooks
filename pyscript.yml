@@ -5,10 +5,11 @@
   vars:
     script_name: "/tmp/script.py"   # default value
   tasks:
-    - name: Execute Python script
-      ansible.builtin.command: python3 -u {{ script_name }}
-      register: script_output
-
-    - name: Show script output
-      ansible.builtin.debug:
-        var: script_output.stdout_lines
+    - name: Run Python script asynchronously
+      ansible.builtin.command:
+        cmd: python3 -u "{{ script_name }}"
+      async: 3600       # max runtime in seconds
+      poll: 0           # do not wait for completion
+      register: async_job
+    - name: Stream script output
+      ansible.builtin.shell: tail -f /tmp/count_output.log
