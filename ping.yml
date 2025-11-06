@@ -1,6 +1,6 @@
 ---
 - name: Test connectivity
-  hosts: myamh
+  hosts: all
   tasks:
     - name: Ping all hosts
       ansible.builtin.ping:
