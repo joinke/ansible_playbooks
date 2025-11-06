@@ -5,7 +5,4 @@
     script_name: /tmp/script.py
   tasks:
     - name: Run Python script
-      ansible.builtin.command:
-        cmd: python3 -u "{{ script_name }}"
-      register: script_output
-      # stdout will be streamed to Jenkins via Ansible output
+      ansible.builtin.shell: python3 -u "{{ script_name }}" | tee /tmp/script.log
