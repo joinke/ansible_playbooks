@@ -1,6 +1,6 @@
 ---
 - name: Run Python script
-  hosts: all
+  hosts: "{{ target_hosts }}"
   gather_facts: false
   vars:
     script_name: "/tmp/script.py"   # default value
