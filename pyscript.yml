@@ -1,15 +1,13 @@
----
-- name: Run Python script
+- name: Run Python script and stream output
   hosts: "{{ target_hosts }}"
   gather_facts: false
   vars:
     script_name: /tmp/script.py
   tasks:
-    - name: Run Python script asynchronously
+    - name: Run Python script
       ansible.builtin.command:
         cmd: python3 -u "{{ script_name }}"
+      register: script_output
       async: 3600
-      poll: 0
-      register: async_job
-    - name: Stream script output
-      ansible.builtin.shell: tail -f /tmp/count_output.log
+      poll: 1  # Poll until done
+      # stdout will be streamed to Jenkins via Ansible output
