@@ -1,0 +1,14 @@
+---
+- name: Run Python script
+  hosts: all
+  gather_facts: false
+  vars:
+    script_name: "/tmp/script.py"   # default value
+  tasks:
+    - name: Execute Python script
+      ansible.builtin.command: python3 {{ script_name }}
+      register: script_output
+
+    - name: Show script output
+      ansible.builtin.debug:
+        var: script_output.stdout_lines
