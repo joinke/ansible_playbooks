@@ -1,1 +1,44 @@
+---
+- name: Example Playbook to run 'pwd'
+  hosts: mytargets # Replace with 'localhost' or an inventory group like 'webservers'
+  gather_facts: false      # We don't need facts for this simple task
+
+  tasks:
+    - name: Execute cat command on the remote host
+      ansible.builtin.command: cat /opt/fileact/config.json
+      register: pwd_result
+      # 'register' saves the output (stdout, stderr, rc) into a variable
+
+    - name: Random File
+      ansible.builtin.debug:
+        msg: "The content of config.json  on {{ inventory_hostname }} is: {{ pwd_result.stdout }}"
+
+    - name: Fetch the log file from the remote server
+      ansible.builtin.fetch:
+        # The absolute path of the file on the REMOTE host
+        src: /opt/fileact/config.json
+
+        # The local directory where files will be saved on the Jenkins machine
+        # The default behavior creates a path like: ./fetched/HOSTNAME/var/log/syslog
+        dest: "{{ fetch_dest }}"
+
+        # 'flat: yes' optional parameter
+        # If set to 'yes', the file is saved directly into the 'dest' folder
+        # without the hostname and original directory structure.
+        # e.g. ./fetched/syslog
+        flat: yes
+
+    - name: Copy example.py from local /opt  directory to remote /tmp/
+      ansible.builtin.copy:
+        # The source path on the LOCAL (Jenkins) machine
+        src: /opt/example.py
+
+        # The destination path on the REMOTE host
+        dest: /tmp/example.py
+
+        # Optional parameters to set permissions on the remote file
+        owner: wanpen
+        group: wanpen
+        mode: '0644'
+      become: true #
 
