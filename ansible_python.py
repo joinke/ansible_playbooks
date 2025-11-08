@@ -3,10 +3,11 @@ import os
 import subprocess
 import sys
 
-# Dynamic workspace path (Jenkins provides $WORKSPACE)
 WORKSPACE = os.getenv("WORKSPACE", "/tmp")
+SSH_KEY = os.getenv("SSH_KEY")
+SSH_USER = os.getenv("SSH_USER")
 
-# Construct ansible-playbook command
+# Construct Ansible command
 cmd = [
     "ansible-playbook",
     "-i", "inventories/ansible_hosts",
@@ -14,16 +15,16 @@ cmd = [
     "--become",
     "--become-user", "wanpen",
     "--extra-vars", f"fetch_dest={WORKSPACE}/fetched/",
+    "-u", SSH_USER,             # use Jenkins-provided username
+    "--private-key", SSH_KEY,   # use Jenkins-provided key file
     "-v"
 ]
 
-# Copy Jenkins environment (to keep SSH_AUTH_SOCK and others)
 env = os.environ.copy()
 env["ANSIBLE_HOST_KEY_CHECKING"] = "False"
 
 print("✅ Running command:\n", " ".join(cmd), "\n", flush=True)
 
-# Run Ansible and stream live output to Jenkins
 process = subprocess.Popen(cmd, env=env, stdout=sys.stdout, stderr=sys.stderr)
 rc = process.wait()
 
