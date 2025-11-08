@@ -5,7 +5,7 @@
 
   tasks:
     - name: Counter
-      ansible.builtin.command: python3 /tmp/example.py
+      ansible.builtin.shell: python3 -u /tmp/example.py | tee /tmp/counter.log
       register: pwd_result
       # 'register' saves the output (stdout, stderr, rc) into a variable
 
