@@ -3,7 +3,7 @@ import os
 import subprocess
 
 class SSHRunner:
-    def __init__(self, hosts=None, user=None, key_file=None, inventory_file=None):
+    def __init__(self, hosts=None, user=None, key_file=None, inventory_file='hostsfile'):
         """
         hosts: optional list of host IPs / hostnames
         user: SSH username (optional, defaults to env SSH_USER)
