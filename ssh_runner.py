@@ -5,7 +5,7 @@ from ssh_runner_class import SSHRunner   # your SSHRunner class
 WORKSPACE = os.getenv("WORKSPACE", "/tmp")
 
 runner = SSHRunner(
-    inventory_file="hostsfile",
+    hosts = "192.168.70.175"
     max_workers=10
 )
 
