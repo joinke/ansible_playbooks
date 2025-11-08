@@ -39,13 +39,14 @@ properties([
             name: 'Environment',
             choiceType: 'ET_FORMATTED_HTML',
             omitValueField: true,
-            referencedParameters: '',
+            referencedParameters: 'OPERATION',
             script: [
                 $class: 'GroovyScript',
                 script: [
                     $class: 'SecureGroovyScript',
                     sandbox: true,
                     script: '''
+                        def op = OPERATION?.trim()
                         def branchMap = [
                             'UAT01': 'UAT01',
                             'dev': 'Development',
@@ -54,7 +55,7 @@ properties([
 
                         // Pre-select some options if needed
                         def defaultSelected = ['main']
-
+                        if (op == 'ssh_runner.py') {
                         // Build checkbox list
                         def html = new StringBuilder()
                         branchMap.each { value, label ->
@@ -65,6 +66,9 @@ properties([
                         }
 
                         return html.toString()
+                        } else {
+                          return ''
+                        }
                     '''
                 ]
             ]
