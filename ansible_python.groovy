@@ -44,6 +44,7 @@ pipeline {
   }
   environment {
     HOST_LIST = '192.168.70.175,192.168.70.193'
+    OPERATION = params.OPERATION
   }
   stages {
     stage('Run Ansible via Python') {
@@ -52,7 +53,7 @@ pipeline {
                                            keyFileVariable: 'SSH_KEY',
                                            usernameVariable: 'SSH_USER')]) {
           sh '''
-            echo "🧩 Using SSH key from Jenkins: $SSH_KEY for user $SSH_USER and operation "
+            echo "🧩 Using SSH key from Jenkins: $SSH_KEY for user $SSH_USER and $OPERATION "
 
             # Run the Python wrapper (Ansible will use the key directly)
             python3 -u ssh_runner.py
