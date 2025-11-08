@@ -7,16 +7,14 @@ pipeline {
   stages {
     stage('Run Ansible via Python') {
       steps {
-        // Inject Jenkins SSH credentials for Ansible to connect to remote hosts
-        sshagent(['00b69538-5290-4373-a385-c2e59e5a4d9f']) {
+        withCredentials([sshUserPrivateKey(credentialsId: '00b69538-5290-4373-a385-c2e59e5a4d9f',
+                                           keyFileVariable: 'SSH_KEY',
+                                           usernameVariable: 'SSH_USER')]) {
           sh '''
-            echo "🧩 SSH Agent available at: $SSH_AUTH_SOCK"
+            echo "🧩 Using SSH key from Jenkins: $SSH_KEY for user $SSH_USER"
             export ANSIBLE_HOST_KEY_CHECKING=False
 
-            # Optionally confirm key works:
-            ssh-add -l
-
-            # Run your Python wrapper (which calls ansible-playbook)
+            # Run the Python wrapper (Ansible will use the key directly)
             python3 -u ansible_python.py
           '''
         }
