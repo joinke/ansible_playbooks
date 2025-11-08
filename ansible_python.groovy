@@ -36,7 +36,7 @@ properties([
         ],
         [
             $class: 'DynamicReferenceParameter',
-            name: 'Environment',
+            name: '\u200B',
             choiceType: 'ET_FORMATTED_HTML',
             omitValueField: true,
             referencedParameters: 'OPERATION',
