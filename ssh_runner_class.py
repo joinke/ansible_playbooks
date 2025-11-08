@@ -7,7 +7,7 @@ class SSHRunner:
         self.hosts = []
         self.user = os.getenv("SSH_USER")        # SSH user from environment
         self.password = os.getenv("SSH_PASS")    # SSH password from environment
-        self.key_file = os.getenv("SSH_PASS")               # Optional SSH key file
+        self.key_file = os.getenv("SSH_KEY")               # Optional SSH key file
         self._load_inventory(inventory_file)
 
     def _load_inventory(self, inventory_file):
