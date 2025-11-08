@@ -1,15 +1,18 @@
 import ansible_runner, os
 
 r = ansible_runner.run(
-    private_data_dir='.',
+    private_data_dir='.',  # run directly from repo
     playbook='playbooks/list.yml',
     inventory='inventories/ansible_hosts',
     extravars={'fetch_dest': '/tmp/fetched/'},
     envvars={
+        **os.environ,  # inherit everything from Jenkins environment
         'ANSIBLE_HOST_KEY_CHECKING': 'False',
-        'SSH_AUTH_SOCK': os.getenv('SSH_AUTH_SOCK')  # Jenkins-provided agent socket
     },
+    quiet=False
 )
-print("Status:", r.status)       # e.g. "successful"
-print("RC:", r.rc)               # return code
-print("Stdout:", r.stdout.read())  # full stdout text
+
+print("Status:", r.status)
+print("RC:", r.rc)
+print("Stdout:", r.stdout.read())
+
