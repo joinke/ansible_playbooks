@@ -34,8 +34,6 @@ properties([
                 ]
             ]
         ],
-        properties([
-    parameters([
         [
             $class: 'DynamicReferenceParameter',
             name: 'Environment',
