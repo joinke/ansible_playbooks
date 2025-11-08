@@ -4,8 +4,9 @@ from ssh_runner_class import SSHRunner   # your SSHRunner class
 
 WORKSPACE = os.getenv("WORKSPACE", "/tmp")
 
+hosts = "192.168.70.175"
 runner = SSHRunner(
-    hosts = "192.168.70.175"
+    hosts = hosts,
     max_workers=10
 )
 
