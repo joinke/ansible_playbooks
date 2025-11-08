@@ -1,3 +1,25 @@
+properties {[
+  parameters {[
+        // Dropdown: CATEGORY
+        [
+            $class: 'CascadeChoiceParameter',
+            choiceType: 'PT_SINGLE_SELECT',
+            filterable: false,
+            name: 'CATEGORY',
+            referencedParameters: '',
+            script: [
+                $class: 'GroovyScript',
+                script: [
+                    $class: 'SecureGroovyScript',
+                    sandbox: true,
+                    script: '''
+                        return ['Frontend', 'Backend']
+                    '''
+                ]
+            ]
+        ],  
+  ]}
+]}
 pipeline {
   agent any
   options {
