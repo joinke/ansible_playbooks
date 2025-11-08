@@ -13,9 +13,9 @@ properties([
                     sandbox: true,
                     script: '''
                         def branchMap = [
-                            'main': 'Main Branch',
-                            'dev': 'Development',
-                            'feature-ui': 'UI Feature'
+                            'ssh_runner.py': 'Stop AMH',
+                            'ssh_runner.py': 'Start AMH',
+                            'ssh_runner.py': 'Restart AMH'
                         ]
 
                         // Select the first option by default
@@ -56,7 +56,7 @@ pipeline {
             echo "🧩 Using SSH key from Jenkins: $SSH_KEY for user $SSH_USER and $OPERATION "
 
             # Run the Python wrapper (Ansible will use the key directly)
-            python3 -u ssh_runner.py $OPERATION
+            python3 -u $OPERATION
           '''
         }
       }
