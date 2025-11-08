@@ -56,7 +56,7 @@ pipeline {
             echo "🧩 Using SSH key from Jenkins: $SSH_KEY for user $SSH_USER and $OPERATION "
 
             # Run the Python wrapper (Ansible will use the key directly)
-            python3 -u ssh_runner.py
+            python3 -u ssh_runner.py $OPERATION
           '''
         }
       }
