@@ -4,26 +4,27 @@ import subprocess
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 class SSHRunner:
-    def __init__(self, hosts=None, user=None, key_file=None, inventory_file=None, max_workers=5):
+    def __init__(self, hosts=None, user=None, key_file=None, max_workers=5):
+        """
+        hosts: list or comma-separated string of hostnames/IPs
+        user: SSH user
+        key_file: path to private key
+        max_workers: parallelism
+        """
         self.user = user or os.getenv("SSH_USER")
         self.key_file = key_file or os.getenv("SSH_KEY")
-        self.hosts = hosts or []
         self.max_workers = max_workers
 
-        if inventory_file:
-            self.hosts = self._read_inventory(inventory_file)
+        if isinstance(hosts, str):
+            # Convert comma-separated string to list
+            self.hosts = [h.strip() for h in hosts.split(",") if h.strip()]
+        elif isinstance(hosts, list):
+            self.hosts = hosts
+        else:
+            self.hosts = []
 
         if not self.hosts:
-            raise ValueError("No hosts provided or found in inventory file")
-
-    def _read_inventory(self, filepath):
-        hosts = []
-        with open(filepath) as f:
-            for line in f:
-                line = line.strip()
-                if line and not line.startswith("#") and not line.startswith("["):
-                    hosts.append(line.split()[0])
-        return hosts
+            raise ValueError("No hosts provided")
 
     def _run_on_host(self, host, command_args):
         ssh_cmd = ["ssh", "-o", "StrictHostKeyChecking=no"]
