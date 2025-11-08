@@ -1,11 +1,10 @@
-properties ([
-  parameters ([
-        // Dropdown: CATEGORY
+properties([
+    parameters([
         [
-            $class: 'CascadeChoiceParameter',
-            choiceType: 'PT_SINGLE_SELECT',
-            filterable: false,
-            name: 'CATEGORY',
+            $class: 'DynamicReferenceParameter',
+            name: 'BranchName',
+            choiceType: 'ET_FORMATTED_HTML',
+            omitValueField: true,
             referencedParameters: '',
             script: [
                 $class: 'GroovyScript',
@@ -13,12 +12,29 @@ properties ([
                     $class: 'SecureGroovyScript',
                     sandbox: true,
                     script: '''
-                        return ['Frontend', 'Backend']
+                        def branchMap = [
+                            'main': 'Main Branch',
+                            'dev': 'Development',
+                            'feature-ui': 'UI Feature'
+                        ]
+
+                        // Select the first option by default
+                        def defaultValue = branchMap.keySet().iterator().next()
+
+                        // Build <select> dropdown
+                        def html = new StringBuilder("<select name='value'>")
+                        branchMap.each { value, label ->
+                            def selected = (value == defaultValue) ? 'selected' : ''
+                            html.append("<option value='${value}' ${selected}>${label}</option>")
+                        }
+                        html.append("</select>")
+
+                        return html.toString()
                     '''
                 ]
             ]
-        ],  
-  ])
+        ]
+    ])
 ])
 
 pipeline {
