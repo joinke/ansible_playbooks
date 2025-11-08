@@ -7,7 +7,7 @@ class SSHRunner:
         self.hosts = []
         self.user = os.getenv("SSH_USER")        # SSH user from environment
         self.password = os.getenv("SSH_PASS")    # SSH password from environment
-        #self.key_file = key_file                 # Optional SSH key file
+        self.key_file = os.getenv("SSH_PASS")               # Optional SSH key file
         self._load_inventory(inventory_file)
 
     def _load_inventory(self, inventory_file):
@@ -34,8 +34,8 @@ class SSHRunner:
                 client.connect(
                     hostname=host,
                     username=self.user,
-                    #key_filename=self.key_file,
-                    password=self.password,
+                    key_filename=self.key_file,
+                    #password=self.password,
                     look_for_keys=False,
                     allow_agent=True
                 )
