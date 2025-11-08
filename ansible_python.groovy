@@ -33,9 +33,47 @@ properties([
                     '''
                 ]
             ]
+        ],
+        properties([
+    parameters([
+        [
+            $class: 'DynamicReferenceParameter',
+            name: 'Environment',
+            choiceType: 'ET_FORMATTED_HTML',
+            omitValueField: true,
+            referencedParameters: '',
+            script: [
+                $class: 'GroovyScript',
+                script: [
+                    $class: 'SecureGroovyScript',
+                    sandbox: true,
+                    script: '''
+                        def branchMap = [
+                            'UAT01': 'UAT01',
+                            'dev': 'Development',
+                            'feature-ui': 'UI Feature'
+                        ]
+
+                        // Pre-select some options if needed
+                        def defaultSelected = ['main']
+
+                        // Build checkbox list
+                        def html = new StringBuilder()
+                        branchMap.each { value, label ->
+                            def checked = (value in defaultSelected) ? 'checked' : ''
+                            html.append("<label>")
+                            html.append("<input type='checkbox' name='value' value='${value}' ${checked}> ${label}")
+                            html.append("</label><br>")
+                        }
+
+                        return html.toString()
+                    '''
+                ]
+            ]
         ]
     ])
 ])
+
 
 pipeline {
   agent any
