@@ -4,7 +4,7 @@ pipeline {
     ansiColor('xterm')  // enable colored Ansible output
   }
   environment {
-    HOST_LIST = '192.168.70.175'
+    HOST_LIST = '192.168.70.175,192.168.70.193'
   }
   stages {
     stage('Run Ansible via Python') {
