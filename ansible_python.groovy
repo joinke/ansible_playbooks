@@ -1,3 +1,8 @@
+def envMap = [
+    'UAT01': 'UAT01',
+    'dev': 'Development',
+    'feature-ui': 'UI Feature'
+]
 properties([
     parameters([
         [
@@ -47,18 +52,12 @@ properties([
                     sandbox: true,
                     script: '''
                         def op = OPERATION?.trim()
-                        def branchMap = [
-                            'UAT01': 'UAT01',
-                            'dev': 'Development',
-                            'feature-ui': 'UI Feature'
-                        ]
-
                         // Pre-select some options if needed
                         def defaultSelected = ['main']
                         if (op == 'ssh_runner.py') {
                         // Build checkbox list
                         def html = new StringBuilder()
-                        branchMap.each { value, label ->
+                        envMap.each { value, label ->
                             def checked = (value in defaultSelected) ? 'checked' : ''
                             html.append("<label>")
                             html.append("<input type='checkbox' name='value' value='${value}' ${checked}> ${label}")
