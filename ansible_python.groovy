@@ -44,7 +44,7 @@ pipeline {
   }
   environment {
     HOST_LIST = '192.168.70.175,192.168.70.193'
-    OPERATION = params.OPERATION
+    OPERATION = "${params.OPERATION}"
   }
   stages {
     stage('Run Ansible via Python') {
