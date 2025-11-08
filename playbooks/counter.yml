@@ -12,7 +12,7 @@
     - name: Fetch the log file from the remote server
       ansible.builtin.fetch:
         # The absolute path of the file on the REMOTE host
-        src: /opt/fileact/config.json
+        src: /tmp/count_output.log
 
         # The local directory where files will be saved on the Jenkins machine
         # The default behavior creates a path like: ./fetched/HOSTNAME/var/log/syslog
