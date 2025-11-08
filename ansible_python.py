@@ -3,9 +3,7 @@ import os
 import subprocess
 import sys
 
-# Environment variables
 user = os.getenv("SSH_USER")
-password = os.getenv("SSH_PASS")
 WORKSPACE = os.getenv("WORKSPACE", "/tmp")
 
 cmd = [
@@ -19,23 +17,15 @@ cmd = [
     "-v"
 ]
 
-# Copy environment and add Ansible settings
 env = os.environ.copy()
 env["ANSIBLE_HOST_KEY_CHECKING"] = "False"
-#env["ANSIBLE_ASK_PASS"] = "True"
-#env["ANSIBLE_PASSWORD"] = password  # if modules read it
 
-# Force Python stdout/stderr to be unbuffered
-sys.stdout.reconfigure(line_buffering=True)
-sys.stderr.reconfigure(line_buffering=True)
+# Use subprocess to stream output line by line
+process = subprocess.Popen(cmd, env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1)
 
-# Launch subprocess with real-time output
-process = subprocess.Popen(
-    cmd,
-    env=env,
-    stdout=sys.stdout,
-    stderr=sys.stderr
-)
+# Stream to Jenkins console in real-time
+for line in process.stdout:
+    print(line, end='')  # print each line immediately
 
-# Wait for completion and exit with the same code
+process.stdout.close()
 sys.exit(process.wait())
