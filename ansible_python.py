@@ -1,18 +1,33 @@
-import ansible_runner, os
+#!/usr/bin/env python3
+import os
+import subprocess
+import sys
 
-r = ansible_runner.run(
-    private_data_dir='.',  # run directly from repo
-    playbook='playbooks/list.yml',
-    inventory='inventories/ansible_hosts',
-    extravars={'fetch_dest': '/tmp/fetched/'},
-    envvars={
-        **os.environ,  # inherit everything from Jenkins environment
-        'ANSIBLE_HOST_KEY_CHECKING': 'False',
-    },
-    quiet=False
-)
+# Dynamic workspace path (Jenkins provides $WORKSPACE)
+WORKSPACE = os.getenv("WORKSPACE", "/tmp")
 
-print("Status:", r.status)
-print("RC:", r.rc)
-print("Stdout:", r.stdout.read())
+# Construct ansible-playbook command
+cmd = [
+    "ansible-playbook",
+    "-i", "inventories/ansible_hosts",
+    "playbooks/list.yml",
+    "--become",
+    "--become-user", "wanpen",
+    "--extra-vars", f"fetch_dest={WORKSPACE}/fetched/",
+    "-v"
+]
+
+# Copy Jenkins environment (to keep SSH_AUTH_SOCK and others)
+env = os.environ.copy()
+env["ANSIBLE_HOST_KEY_CHECKING"] = "False"
+
+print("✅ Running command:\n", " ".join(cmd), "\n", flush=True)
+
+# Run Ansible and stream live output to Jenkins
+process = subprocess.Popen(cmd, env=env, stdout=sys.stdout, stderr=sys.stderr)
+rc = process.wait()
+
+print(f"\n🔹 Ansible playbook finished with exit code: {rc}")
+sys.exit(rc)
+
 
