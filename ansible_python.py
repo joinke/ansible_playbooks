@@ -11,7 +11,7 @@ SSH_USER = os.getenv("SSH_USER")
 cmd = [
     "ansible-playbook",
     "-i", "inventories/ansible_hosts",
-    "playbooks/list.yml",
+    "playbooks/counter.yml",
     "--become",
     "--become-user", "wanpen",
     "--extra-vars", f"fetch_dest={WORKSPACE}/fetched/",
