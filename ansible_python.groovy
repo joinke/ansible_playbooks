@@ -12,10 +12,9 @@ pipeline {
                                            usernameVariable: 'SSH_USER')]) {
           sh '''
             echo "🧩 Using SSH key from Jenkins: $SSH_KEY for user $SSH_USER"
-            export ANSIBLE_HOST_KEY_CHECKING=False
 
             # Run the Python wrapper (Ansible will use the key directly)
-            python3 -u ansible_python.py
+            python3 -u ssh_runner.py
           '''
         }
       }
