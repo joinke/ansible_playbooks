@@ -22,8 +22,8 @@ cmd = [
 # Copy environment and add Ansible settings
 env = os.environ.copy()
 env["ANSIBLE_HOST_KEY_CHECKING"] = "False"
-env["ANSIBLE_ASK_PASS"] = "True"
-env["ANSIBLE_PASSWORD"] = password  # if modules read it
+#env["ANSIBLE_ASK_PASS"] = "True"
+#env["ANSIBLE_PASSWORD"] = password  # if modules read it
 
 # Force Python stdout/stderr to be unbuffered
 sys.stdout.reconfigure(line_buffering=True)
