@@ -13,9 +13,9 @@ properties([
                     sandbox: true,
                     script: '''
                         def branchMap = [
-                            'ssh_runner.py': 'Stop AMH',
+                            'ssh_runner1.py': 'Stop AMH',
                             'ssh_runner.py': 'Start AMH',
-                            'ssh_runner.py': 'Restart AMH'
+                            'ssh_runner3.py': 'Restart AMH',
                         ]
 
                         // Select the first option by default
