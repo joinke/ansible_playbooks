@@ -1,5 +1,5 @@
-properties {[
-  parameters {[
+properties ([
+  parameters ([
         // Dropdown: CATEGORY
         [
             $class: 'CascadeChoiceParameter',
@@ -18,8 +18,9 @@ properties {[
                 ]
             ]
         ],  
-  ]}
-]}
+  ])
+])
+
 pipeline {
   agent any
   options {
