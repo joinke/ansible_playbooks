@@ -25,7 +25,7 @@ properties([
                         def html = new StringBuilder("<select name='value'>")
                         branchMap.each { value, label ->
                             def selected = (value == defaultValue) ? 'selected' : ''
-                            html.append("<option value='${value}' ${selected}>${label}</option>")
+                            html.append("<option name='value' value='${value}' ${selected}>${label}</option>")
                         }
                         html.append("</select>")
 
