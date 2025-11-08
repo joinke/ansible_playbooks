@@ -4,6 +4,7 @@ import subprocess
 import sys
 
 user = os.getenv("SSH_USER")
+password = os.getenv("SSH_PASS")
 WORKSPACE = os.getenv("WORKSPACE", "/tmp")
 
 cmd = [
@@ -19,13 +20,12 @@ cmd = [
 
 env = os.environ.copy()
 env["ANSIBLE_HOST_KEY_CHECKING"] = "False"
+env["ANSIBLE_ASK_PASS"] = "True"
+env["ANSIBLE_PASSWORD"] = password
 
-# Use subprocess to stream output line by line
-process = subprocess.Popen(cmd, env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1)
-
-# Stream to Jenkins console in real-time
-for line in process.stdout:
-    print(line, end='')  # print each line immediately
-
-process.stdout.close()
-sys.exit(process.wait())
+# Use subprocess with stdout=PIPE and line buffering
+with subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=env, bufsize=1, text=True) as process:
+    for line in process.stdout:
+        print(line, end='', flush=True)  # print line immediately
+    process.wait()
+    sys.exit(process.returncode)
