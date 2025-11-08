@@ -3,10 +3,10 @@ import os
 from ssh_runner_class import SSHRunner   # your SSHRunner class
 
 WORKSPACE = os.getenv("WORKSPACE", "/tmp")
+HOSTS = os.getenv("HOST_LIST", "")
 
-hosts = "192.168.70.175"
 runner = SSHRunner(
-    hosts = hosts,
+    hosts = HOSTS,
     max_workers=10
 )
 
