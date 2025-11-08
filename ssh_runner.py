@@ -5,7 +5,7 @@ from ssh_runner_class import SSHRunner   # your SSHRunner class
 WORKSPACE = os.getenv("WORKSPACE", "/tmp")
 
 runner = SSHRunner(
-    inventory_file="inventories/ansible_hosts",
+    inventory_file="hostsfile",
     key_file=f"{WORKSPACE}/ssh_key.pem"  # optional, can be None if using password
 )
 
