@@ -1,59 +1,69 @@
 #!/usr/bin/env python3
-import paramiko
 import os
+import subprocess
 
 class SSHRunner:
-    def __init__(self, inventory_file, key_file=None):
-        self.hosts = []
-        self.user = os.getenv("SSH_USER")        # SSH user from environment
-        #self.password = os.getenv("SSH_PASS")    # SSH password from environment
-        self.key_file = os.getenv("SSH_KEY")               # Optional SSH key file
-        self._load_inventory(inventory_file)
+    def __init__(self, hosts=None, user=None, key_file=None, inventory_file=None):
+        """
+        hosts: optional list of host IPs / hostnames
+        user: SSH username (optional, defaults to env SSH_USER)
+        key_file: path to SSH private key (optional, defaults to env SSH_KEY)
+        inventory_file: path to Ansible-style inventory file
+        """
+        self.user = user or os.getenv("SSH_USER")
+        self.key_file = key_file or os.getenv("SSH_KEY")
+        self.hosts = hosts or []
 
-    def _load_inventory(self, inventory_file):
-        """Load hosts from a file (simple one-host-per-line format)"""
-        with open(inventory_file) as f:
+        if inventory_file:
+            self.hosts = self._read_inventory(inventory_file)
+
+        if not self.hosts:
+            raise ValueError("No hosts provided or found in inventory file")
+
+    def _read_inventory(self, filepath):
+        """
+        Simple parser for an Ansible hosts file.
+        Only reads plain host entries (ignores groups and vars).
+        """
+        hosts = []
+        with open(filepath) as f:
             for line in f:
                 line = line.strip()
-                if line and not line.startswith("#"):
-                    self.hosts.append(line)
+                if line and not line.startswith("#") and not line.startswith("["):
+                    # Remove inline comments
+                    host = line.split()[0]
+                    hosts.append(host)
+        return hosts
 
     def run_command(self, command_args):
         """
-        Run a command with arguments on all hosts.
-        command_args: list of command parts, e.g. ['python3', '/tmp/example.py', '--arg', 'value']
+        command_args: list of command and arguments, e.g. ["ls", "-l", "/tmp"]
         """
-        if not isinstance(command_args, list):
-            raise TypeError("command_args must be a list")
+        if not command_args:
+            raise ValueError("No command provided")
 
         for host in self.hosts:
-            print(f"\n🟢 Connecting to {host} as {self.user}...")
-            client = paramiko.SSHClient()
-            client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            try:
-                client.connect(
-                    hostname=host,
-                    username=self.user,
-                    key_filename=self.key_file,
-                    #password=self.password,
-                    look_for_keys=False,
-                    allow_agent=True
-                )
-                
-                # Join command args safely into a shell command
-                command = " ".join(paramiko.util.escape_shell(arg) for arg in command_args)
+            ssh_cmd = ["ssh", "-o", "StrictHostKeyChecking=no"]
+            if self.key_file:
+                ssh_cmd.extend(["-i", self.key_file])
+            remote = f"{self.user}@{host}" if self.user else host
+            ssh_cmd.append(remote)
+            ssh_cmd.extend(command_args)
 
-                stdin, stdout, stderr = client.exec_command(command)
-                
-                # Stream stdout in real-time
-                for line in iter(stdout.readline, ""):
-                    print(f"[{host}] {line}", end='')
+            print(f"\n🖥 Running on {host}: {' '.join(command_args)}\n")
+            process = subprocess.Popen(
+                ssh_cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True
+            )
 
-                # Stream stderr in real-time
-                for line in iter(stderr.readline, ""):
-                    print(f"[{host}][ERR] {line}", end='')
+            # Stream output in real time
+            for line in iter(process.stdout.readline, ""):
+                print(line, end="")
 
-            except Exception as e:
-                print(f"[{host}][ERROR] {e}")
-            finally:
-                client.close()
+            retcode = process.wait()
+            if retcode != 0:
+                print(f"\n⚠️ Command failed on {host} with exit code {retcode}")
+            else:
+                print(f"\n✅ Command finished on {host}")
