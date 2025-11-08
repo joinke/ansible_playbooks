@@ -1,0 +1,14 @@
+---
+- name: Example Playbook to run 'pwd'
+  hosts: mytargets # Replace with 'localhost' or an inventory group like 'webservers'
+  gather_facts: false      # We don't need facts for this simple task
+
+  tasks:
+    - name: Counter
+      ansible.builtin.command: python3 /tmp/example.py
+      register: pwd_result
+      # 'register' saves the output (stdout, stderr, rc) into a variable
+
+    - name: Debug output
+      ansible.builtin.debug:
+        msg: "{{ pwd_result.stdout }}"
