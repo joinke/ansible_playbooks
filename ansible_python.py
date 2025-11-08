@@ -20,7 +20,7 @@ cmd = [
 
 env = os.environ.copy()
 env["ANSIBLE_HOST_KEY_CHECKING"] = "False"
-env["ANSIBLE_STDOUT_CALLBACK"] = "minimal"
+env["ANSIBLE_STDOUT_CALLBACK"] = "debug"
 
 # Use subprocess with stdout=PIPE and line buffering
 with subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=env, bufsize=1, text=True) as process:
