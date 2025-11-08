@@ -2,7 +2,7 @@ properties([
     parameters([
         [
             $class: 'DynamicReferenceParameter',
-            name: 'BranchName',
+            name: 'OPERATION',
             choiceType: 'ET_FORMATTED_HTML',
             omitValueField: true,
             referencedParameters: '',
@@ -52,7 +52,7 @@ pipeline {
                                            keyFileVariable: 'SSH_KEY',
                                            usernameVariable: 'SSH_USER')]) {
           sh '''
-            echo "🧩 Using SSH key from Jenkins: $SSH_KEY for user $SSH_USER"
+            echo "🧩 Using SSH key from Jenkins: $SSH_KEY for user $SSH_USER and operation ${params.OPERATION}"
 
             # Run the Python wrapper (Ansible will use the key directly)
             python3 -u ssh_runner.py
