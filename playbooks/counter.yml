@@ -9,6 +9,17 @@
       register: pwd_result
       # 'register' saves the output (stdout, stderr, rc) into a variable
 
-    - name: Debug output
-      ansible.builtin.debug:
-        msg: "{{ pwd_result.stdout_lines }}"
+    - name: Fetch the log file from the remote server
+      ansible.builtin.fetch:
+        # The absolute path of the file on the REMOTE host
+        src: /opt/fileact/config.json
+
+        # The local directory where files will be saved on the Jenkins machine
+        # The default behavior creates a path like: ./fetched/HOSTNAME/var/log/syslog
+        dest: "{{ fetch_dest }}"
+
+        # 'flat: yes' optional parameter
+        # If set to 'yes', the file is saved directly into the 'dest' folder
+        # without the hostname and original directory structure.
+        # e.g. ./fetched/syslog
+        flat: yes
