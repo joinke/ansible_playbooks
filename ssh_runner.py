@@ -6,7 +6,8 @@ WORKSPACE = os.getenv("WORKSPACE", "/tmp")
 
 runner = SSHRunner(
     inventory_file="hostsfile",
-    key_file=f"{WORKSPACE}/ssh_key.pem"  # optional, can be None if using password
+    key_file=f"{WORKSPACE}/ssh_key.pem",  # optional, can be None if using password
+    max_workers=10
 )
 
 # Run any command, e.g., your Python script with arguments
