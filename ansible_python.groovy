@@ -17,7 +17,7 @@ pipeline {
             ssh-add -l
 
             # Run your Python wrapper (which calls ansible-playbook)
-            python3 -u scripts/run_ansible.py
+            python3 -u ansible_python.py
           '''
         }
       }
