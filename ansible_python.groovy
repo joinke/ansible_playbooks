@@ -5,12 +5,6 @@ pipeline {
   }
 
   stages {
-    stage('Checkout Repo') {
-      steps {
-        git branch: 'main', url: 'git@github.com:your-org/your-ansible-repo.git'
-      }
-    }
-
     stage('Run Ansible via Python') {
       steps {
         // Inject Jenkins SSH credentials for Ansible to connect to remote hosts
