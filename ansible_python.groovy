@@ -150,11 +150,10 @@ pipeline {
       steps {
         script {
             def environments = getSelectedKeys(envMap, env.ENVS ?: '')
-            echo "Selected environments: ${environments}"
             env.SELECTEDENVS = "$environments"
-            //components = getSelectedKeys(compMap, COMPS)
-            //echo "Selected components: ${components}"
             env.SELECTEDCOMP = "${env.COMPS ?: ''}"
+            echo "Selected environments: ${environments}"
+            echo "Selected components: ${env.SELECTEDCOMP}"
         }
         withCredentials([sshUserPrivateKey(credentialsId: '00b69538-5290-4373-a385-c2e59e5a4d9f',
                                            keyFileVariable: 'SSH_KEY',
