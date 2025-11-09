@@ -104,7 +104,7 @@ pipeline {
   stages {
     stage('Run Ansible via Python') {
       steps {
-        def selected = getSelectedKeys(envMap, ENVS)
+        selected = getSelectedKeys(envMap, ENVS)
         echo "Selected keys: ${selected}"
         withCredentials([sshUserPrivateKey(credentialsId: '00b69538-5290-4373-a385-c2e59e5a4d9f',
                                            keyFileVariable: 'SSH_KEY',
