@@ -67,7 +67,7 @@ properties([
                 script: [
                     $class: 'SecureGroovyScript',
                     sandbox: true,
-                    script: """
+                    script: '''
                         def op = OPERATION?.trim()
                         def environmentmap = [
                             'UAT01': 'UAT01',
@@ -79,10 +79,10 @@ properties([
                         if (op == 'ssh_runner.py') {
                         // Build checkbox list
                         def html = new StringBuilder("<b>Environment</b><br>")
-                        envMap.each { value, label ->
+                        environmentmap.each { value, label ->
                             def checked = (value in defaultSelected) ? 'checked' : ''
                             html.append("<label>")
-                            html.append("<input type='checkbox' name='value' value='\${value}' \${checked}> \${label}")
+                            html.append("<input type='checkbox' name='value' value='${value}' ${checked}> ${label}")
                             html.append("</label><br>")
                         }
 
@@ -90,7 +90,7 @@ properties([
                         } else {
                           return ''
                         }
-                    """
+                    '''
                 ]
             ]
         ],
