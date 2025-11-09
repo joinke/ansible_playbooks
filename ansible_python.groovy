@@ -5,7 +5,7 @@ def envMap = [
 ]
 def getSelectedKeys(mymap, boolString) {
     def bools = boolString.split(',').collect { it.trim().toBoolean() }
-    def keys = branchMap.keySet().toList()
+    def keys = mymap.keySet().toList()
     return keys.withIndex()
                .findAll { k, i -> i < bools.size() && bools[i] }
                .collect { it[0] }
