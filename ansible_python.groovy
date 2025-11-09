@@ -128,7 +128,7 @@ properties([
             script: [
                 $class: 'GroovyScript',
                 script: [
-                    $class: 'GroovyScript',
+                    $class: 'SecureGroovyScript',
                     sandbox: true,
                     script: '''
                         def op = OPERATION?.trim()
