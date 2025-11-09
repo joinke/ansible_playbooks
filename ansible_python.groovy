@@ -52,16 +52,13 @@ properties([
                     sandbox: true,
                     script: '''
                         def op = OPERATION?.trim()
-                        // 1. Read the file path
-                        def configFile = new File('/path/to/your/workspace/config/envs.json') // Adjust path as necessary
-                        // 2. Read content and parse it (Requires JSON library/approval)
-                        def envMap = new groovy.json.JsonSlurper().parseText(configFile.text)
+                        def environmentmap = ${groovy.json.JsonOutput.toJson(envMap)}
                         // Pre-select some options if needed
                         def defaultSelected = ['main']
                         if (op == 'ssh_runner.py') {
                         // Build checkbox list
                         def html = new StringBuilder()
-                        envMap.each { value, label ->
+                        environmentmap.each { value, label ->
                             def checked = (value in defaultSelected) ? 'checked' : ''
                             html.append("<label>")
                             html.append("<input type='checkbox' name='value' value='${value}' ${checked}> ${label}")
