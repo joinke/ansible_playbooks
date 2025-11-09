@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import os
 from ssh_runner_class import SSHRunner   # your SSHRunner class
+from environmenthosts import EnvironmentHosts
 
 WORKSPACE = os.getenv("WORKSPACE", "/tmp")
 HOSTS = os.getenv("HOST_LIST", "")
