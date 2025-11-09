@@ -6,10 +6,13 @@ def envMap = [
 def getSelectedKeys(mymap, boolString) {
     def bools = boolString.split(',').collect { it.trim().toBoolean() }
     def keys = mymap.keySet().toList()
-    return keys.withIndex()
-               .findAll { k, i -> i < bools.size() && bools[i] }
-               .collect { it[0] }
-               .join(',')
+    def selected = []
+    for (int i = 0; i < Math.min(keys.size(), bools.size()); i++) {
+        if (bools[i]) {
+            selected << keys[i]
+        }
+    }
+    return selected.join(',')
 }
 
 properties([
