@@ -76,7 +76,7 @@ properties([
                             'UAT03': 'UAT03'
                         ]
                         // Pre-select some options if needed
-                        def defaultSelected = ['main']
+                        def defaultSelected = ['UAT02']
                         if (op == 'ssh_runner.py') {
                         // Build checkbox list
                         def html = new StringBuilder()
