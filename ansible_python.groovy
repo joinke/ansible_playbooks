@@ -52,6 +52,10 @@ properties([
                     sandbox: true,
                     script: '''
                         def op = OPERATION?.trim()
+                        // 1. Read the file path
+                        def configFile = new File('/path/to/your/workspace/config/envs.json') // Adjust path as necessary
+                        // 2. Read content and parse it (Requires JSON library/approval)
+                        def envMap = new groovy.json.JsonSlurper().parseText(configFile.text)
                         // Pre-select some options if needed
                         def defaultSelected = ['main']
                         if (op == 'ssh_runner.py') {
