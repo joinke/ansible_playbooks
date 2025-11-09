@@ -114,7 +114,7 @@ properties([
                             'STPWB': 'ALL'
                         ]
                         // Pre-select some options if needed
-                        def defaultValue = ['STPWB']
+                        def defaultValue = ['ALL']
                         if (op == 'ssh_runner.py') {
                         // Build checkbox list
                         def html = new StringBuilder("<select name='value'>")
