@@ -82,7 +82,7 @@ properties([
                         envMap.each { value, label ->
                             def checked = (value in defaultSelected) ? 'checked' : ''
                             html.append("<label>")
-                            html.append("<input type='checkbox' name='value' value='${value}' ${checked}> ${label}")
+                            html.append("<input type='checkbox' name='value' value=${value} ${checked}> ${label}")
                             html.append("</label><br>")
                         }
 
