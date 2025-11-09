@@ -53,6 +53,11 @@ properties([
                     script: '''
                         def op = OPERATION?.trim()
                         def environmentmap = ${groovy.json.JsonOutput.toJson(envMap)}
+                        environmentmap = [
+                            'UAT01': 'UAT01',
+                            'dev': 'Development',
+                            'feature-ui': 'UI Feature'
+                        ]
                         // Pre-select some options if needed
                         def defaultSelected = ['main']
                         if (op == 'ssh_runner.py') {
