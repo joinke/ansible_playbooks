@@ -1,7 +1,7 @@
 def envMap = [
     'UAT01': 'UAT01',
-    'dev': 'Development',
-    'feature-ui': 'UI Feature'
+    'UAT02': 'UAT02',
+    'UAT03': 'UAT03'
 ]
 def getSelectedKeys(mymap, boolString) {
     def bools = boolString.split(',').collect { it.trim().toBoolean() }
@@ -67,8 +67,8 @@ properties([
                         //def environmentmap = ${groovy.json.JsonOutput.toJson(envMap)}
                         def environmentmap = [
                             'UAT01': 'UAT01',
-                            'dev': 'Development',
-                            'feature-ui': 'UI Feature'
+                            'UAT02': 'UAT02',
+                            'UAT03': 'UAT03'
                         ]
                         // Pre-select some options if needed
                         def defaultSelected = ['main']
