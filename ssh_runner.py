@@ -13,6 +13,9 @@ runner = SSHRunner(
 
 # Run any command, e.g., your Python script with arguments
 print(f"My environments are {SELECTEDENVS}")
+env_hosts = EnvironmentHosts(jsonhosts)
+print(f"First host in {SELECTEDENVS}/STP: {env_hosts.get_first_host(SELECTEDENVS, 'STP')}")
+
 runner.run_command([
     "python3",
     "/tmp/example.py",
