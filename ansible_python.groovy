@@ -14,6 +14,7 @@ def getSelectedKeys(mymap, boolString) {
     }
     return selected.join(',')
 }
+def selected
 
 properties([
     parameters([
@@ -108,14 +109,14 @@ pipeline {
     stage('Run Ansible via Python') {
       steps {
         script {
-            def selected = getSelectedKeys(envMap, ENVS)
+            selected = getSelectedKeys(envMap, ENVS)
             echo "Selected keys: ${selected}"
         }
         withCredentials([sshUserPrivateKey(credentialsId: '00b69538-5290-4373-a385-c2e59e5a4d9f',
                                            keyFileVariable: 'SSH_KEY',
                                            usernameVariable: 'SSH_USER')]) {
           sh '''
-            echo "🧩 Using SSH key from Jenkins: $SSH_KEY for user $SSH_USER and $OPERATION and $ENVS"
+            echo "🧩 Using SSH key from Jenkins: $SSH_KEY for user $SSH_USER and $OPERATION and $selected"
 
             # Run the Python wrapper (Ansible will use the key directly)
             python3 -u $OPERATION
