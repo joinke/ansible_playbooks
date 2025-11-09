@@ -19,7 +19,6 @@ def getSelectedKeys(mymap, boolString) {
     }
     return selected.join(',')
 }
-def selected
 
 properties([
     parameters([
@@ -47,7 +46,7 @@ properties([
                         // Build <select> dropdown
                         def html = new StringBuilder("<select name='value'>")
                         branchMap.each { value, label ->
-                            def selected = (value == defaultValue) ? 'selected' : ''
+                            def  = (value == defaultValue) ? 'selected' : ''
                             html.append("<option name='value' value='${value}' ${selected}>${label}</option>")
                         }
                         html.append("</select>")
@@ -150,18 +149,18 @@ pipeline {
     stage('Run Ansible via Python') {
       steps {
         script {
-            environments = getSelectedKeys(envMap, env.ENVS ?: '')
+            def environments = getSelectedKeys(envMap, env.ENVS ?: '')
             echo "Selected environments: ${environments}"
             env.SELECTEDENVS = "$environments"
             //components = getSelectedKeys(compMap, COMPS)
             //echo "Selected components: ${components}"
-            env.SELECTEDCOMP = "$COMPS"
+            env.SELECTEDCOMP = "${COMPS ?: ''}"
         }
         withCredentials([sshUserPrivateKey(credentialsId: '00b69538-5290-4373-a385-c2e59e5a4d9f',
                                            keyFileVariable: 'SSH_KEY',
                                            usernameVariable: 'SSH_USER')]) {
           sh '''
-            echo "🧩 Using SSH key from Jenkins: $SSH_KEY for user $SSH_USER and $OPERATION and $SELECTEDENVS and $SELECTEDCOMP"
+            echo "🧩 Using SSH key from Jenkins: $SSH_KEY for user $SSH_USER and $OPERATION and envirionments $SELECTEDENVS and component $SELECTEDCOMP"
 
             # Run the Python wrapper (Ansible will use the key directly)
             python3 -u $OPERATION
