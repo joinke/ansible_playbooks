@@ -114,17 +114,15 @@ properties([
                             'STPWB': 'ALL'
                         ]
                         // Pre-select some options if needed
-                        def defaultSelected = ['main']
+                        def defaultValue = ['STPWB']
                         if (op == 'ssh_runner.py') {
                         // Build checkbox list
-                        def html = new StringBuilder()
+                        def html = new StringBuilder("<select name='value'>")
                         compmap.each { value, label ->
-                            def checked = (value in defaultSelected) ? 'checked' : ''
-                            html.append("<label>")
-                            html.append("<input type='checkbox' name='value' value='${value}' ${checked}> ${label}")
-                            html.append("</label><br>")
+                            def selected = (value == defaultValue) ? 'selected' : ''
+                            html.append("<option name='value' value='${value}' ${selected}>${label}</option>")
                         }
-
+                        html.append("</select>")
                         return html.toString()
                         } else {
                           return ''
