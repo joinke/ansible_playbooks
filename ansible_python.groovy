@@ -52,8 +52,8 @@ properties([
                     sandbox: true,
                     script: '''
                         def op = OPERATION?.trim()
-                        def environmentmap = ${groovy.json.JsonOutput.toJson(envMap)}
-                        environmentmap = [
+                        //def environmentmap = ${groovy.json.JsonOutput.toJson(envMap)}
+                        def environmentmap = [
                             'UAT01': 'UAT01',
                             'dev': 'Development',
                             'feature-ui': 'UI Feature'
