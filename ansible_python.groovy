@@ -100,7 +100,7 @@ properties([
             name: '\u200C',
             choiceType: 'ET_FORMATTED_HTML',
             omitValueField: true,
-            referencedParameters: 'COMPONENT',
+            referencedParameters: 'OPERATION',
             script: [
                 $class: 'GroovyScript',
                 script: [
@@ -145,8 +145,8 @@ pipeline {
   environment {
     HOST_LIST = '192.168.70.175,192.168.70.193'
     OPERATION = "${params.OPERATION}"
-    ENVS = "${params['\u200B']}"
-    COMPS = "${params['\u200C']}"
+    ENVS = "${params['\u200B'] ?: ''}"
+    COMPS = "${params['\u200C'] ?: ''}"
   }
   stages {
     stage('Run Ansible via Python') {
