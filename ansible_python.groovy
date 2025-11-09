@@ -111,6 +111,7 @@ pipeline {
         script {
             selected = getSelectedKeys(envMap, ENVS)
             echo "Selected keys: ${selected}"
+            env.SELECTEDENVS = "$selected"
         }
         withCredentials([sshUserPrivateKey(credentialsId: '00b69538-5290-4373-a385-c2e59e5a4d9f',
                                            keyFileVariable: 'SSH_KEY',
