@@ -70,7 +70,7 @@ properties([
                         ]
                         // Pre-select some options if needed
                         def defaultSelected = ['UAT02']
-                        if (op == 'ssh_runner.py') {
+                        
                         // Build checkbox list
                         def html = new StringBuilder()
                         environmentmap.each { value, label ->
@@ -79,11 +79,8 @@ properties([
                             html.append("<input type='checkbox' name='value' value='${value}' ${checked}> ${label}")
                             html.append("</label><br>")
                         }
-
                         return html.toString()
-                        } else {
-                          return ''
-                        }
+                    
                     '''
                 ]
             ]
