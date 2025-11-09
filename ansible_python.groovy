@@ -3,11 +3,7 @@ def envMap = [
     'UAT02': 'UAT02',
     'UAT03': 'UAT03'
 ]
-def compMap = [
-    'STP': 'STP',
-    'WB': 'WB',
-    'STPWB': 'ALL'
-]
+
 def getSelectedKeys(mymap, boolString) {
     def bools = boolString.split(',').collect { it.trim().toBoolean() }
     def keys = mymap.keySet().toList()
