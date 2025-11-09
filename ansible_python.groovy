@@ -150,7 +150,7 @@ pipeline {
     stage('Run Ansible via Python') {
       steps {
         script {
-            environments = getSelectedKeys(envMap, ENVS)
+            environments = getSelectedKeys(envMap, env.ENVS ?: '')
             echo "Selected environments: ${environments}"
             env.SELECTEDENVS = "$environments"
             //components = getSelectedKeys(compMap, COMPS)
