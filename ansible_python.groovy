@@ -129,6 +129,42 @@ properties([
                     '''
                 ]
             ]
+        ],
+        [
+            $class: 'DynamicReferenceParameter',
+            name: '\u200C',
+            choiceType: 'ET_FORMATTED_HTML',
+            omitValueField: true,
+            referencedParameters: 'OPERATION',
+            script: [
+                $class: 'GroovyScript',
+                script: [
+                    $class: 'SecureGroovyScript',
+                    sandbox: true,
+                    script: '''
+                        def op = OPERATION?.trim()
+                        def compmap = [
+                            'RCC': 'RCC',
+                            'WSDC': 'WSDC',
+                            'ALL': 'BOTH'
+                        ]
+                        // Pre-select some options if needed
+                        def defaultValue = 'STPWB'
+                        if (op == 'ssh_runner.py') {
+                        // Build checkbox list
+                        def html = new StringBuilder("<b>Site</b><br><select name='value'>")
+                        compmap.each { value, label ->
+                            def selected = (value == defaultValue) ? 'selected' : ''
+                            html.append("<option name='value' value='${value}' ${selected}>${label}</option>")
+                        }
+                        html.append("</select>")
+                        return html.toString()
+                        } else {
+                          return ''
+                        }
+                    '''
+                ]
+            ]
         ]
     ])
 ])
@@ -144,6 +180,7 @@ pipeline {
     OPERATION = "${params.OPERATION}"
     ENVS = "${params['\u200B'] ?: ''}"
     COMPS = "${params['\u200C'] ?: ''}"
+    SITE = "${params['\u200D'] ?: ''}"
   }
   stages {
     stage('Run Ansible via Python') {
@@ -152,14 +189,16 @@ pipeline {
             def environments = getSelectedKeys(envMap, env.ENVS ?: '')
             env.SELECTEDENVS = "$environments"
             env.SELECTEDCOMP = "${env.COMPS ?: ''}"
+            env.SELECTEDSITE = "${env.SITE ?: ''}"
             echo "Selected environments: ${environments}"
             echo "Selected components: ${env.SELECTEDCOMP}"
+            echo "Selected components: ${env.SELECTEDSITE}"
         }
         withCredentials([sshUserPrivateKey(credentialsId: '00b69538-5290-4373-a385-c2e59e5a4d9f',
                                            keyFileVariable: 'SSH_KEY',
                                            usernameVariable: 'SSH_USER')]) {
           sh '''
-            echo "🧩 Using SSH key from Jenkins: $SSH_KEY for user $SSH_USER and $OPERATION and envirionments $SELECTEDENVS and component $SELECTEDCOMP"
+            echo "🧩 Using SSH key from Jenkins: $SSH_KEY for user $SSH_USER and $OPERATION and envirionments $SELECTEDENVS and component $SELECTEDCOMP and site $SELECTEDSITE"
 
             # Run the Python wrapper (Ansible will use the key directly)
             python3 -u $OPERATION
