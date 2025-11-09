@@ -14,9 +14,9 @@ runner = SSHRunner(
 )
 
 # Run any command, e.g., your Python script with arguments
-print(f"My environments are {SELECTEDENVS}")
+print(f"My environments are {SELECTEDENVS} and components {SELECTEDCOMP}")
 env_hosts = EnvironmentHosts("jsonhosts")
-print(f"First host in {SELECTEDENVS}/STP: {env_hosts.get_first_host(SELECTEDENVS, 'STP')}")
+print(f"First host in {SELECTEDENVS}/{SELECTEDCOMP}: {env_hosts.get_first_host(SELECTEDENVS, SELECTEDCOMP)}")
 
 runner.run_command([
     "python3",
