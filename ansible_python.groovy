@@ -54,6 +54,42 @@ properties([
         ],
         [
             $class: 'DynamicReferenceParameter',
+            name: 'INDIVIDUAL',
+            choiceType: 'ET_FORMATTED_HTML',
+            omitValueField: true,
+            referencedParameters: 'OPERATION',
+            script: [
+                $class: 'GroovyScript',
+                script: [
+                    $class: 'SecureGroovyScript',
+                    sandbox: true,
+                    script: '''
+                        def op = OPERATION?.trim()
+                        def environmentmap = [
+                            'true': 'Individual Hosts',
+                        ]
+                        // Pre-select some options if needed
+                        def defaultSelected = ['UAT02']
+                        if (op == 'ssh_runner.py') {
+                        // Build checkbox list
+                        def html = new StringBuilder()
+                        environmentmap.each { value, label ->
+                            def checked = (value in defaultSelected) ? 'checked' : ''
+                            html.append("<label>")
+                            html.append("<input type='checkbox' name='value' value='${value}' ${checked}> ${label}")
+                            html.append("</label><br>")
+                        }
+
+                        return html.toString()
+                        } else {
+                          return ''
+                        }
+                    '''
+                ]
+            ]
+        ],
+        [
+            $class: 'DynamicReferenceParameter',
             name: '\u200B',
             choiceType: 'ET_FORMATTED_HTML',
             omitValueField: true,
