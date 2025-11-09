@@ -3,6 +3,15 @@ def envMap = [
     'dev': 'Development',
     'feature-ui': 'UI Feature'
 ]
+def getSelectedKeys(mymap, boolString) {
+    def bools = boolString.split(',').collect { it.trim().toBoolean() }
+    def keys = branchMap.keySet().toList()
+    return keys.withIndex()
+               .findAll { k, i -> i < bools.size() && bools[i] }
+               .collect { it[0] }
+               .join(',')
+}
+
 properties([
     parameters([
         [
@@ -95,6 +104,8 @@ pipeline {
   stages {
     stage('Run Ansible via Python') {
       steps {
+        def selected = getSelectedKeys(envMap, ENVS)
+        echo "Selected keys: ${selected}"
         withCredentials([sshUserPrivateKey(credentialsId: '00b69538-5290-4373-a385-c2e59e5a4d9f',
                                            keyFileVariable: 'SSH_KEY',
                                            usernameVariable: 'SSH_USER')]) {
