@@ -6,6 +6,8 @@ from environmenthosts import EnvironmentHosts
 WORKSPACE = os.getenv("WORKSPACE", "/tmp")
 HOSTS = os.getenv("HOST_LIST", "")
 SELECTEDENVS = os.getenv("SELECTEDENVS","")
+SELECTEDCOMP = os.getenv("SELECTEDCOMP","")
+
 runner = SSHRunner(
     hosts = HOSTS,
     max_workers=10
