@@ -79,7 +79,7 @@ properties([
                         def defaultSelected = ['UAT02']
                         if (op == 'ssh_runner.py') {
                         // Build checkbox list
-                        def html = new StringBuilder()
+                        def html = new StringBuilder("<b>Environment</b><br>")
                         environmentmap.each { value, label ->
                             def checked = (value in defaultSelected) ? 'checked' : ''
                             html.append("<label>")
@@ -114,10 +114,10 @@ properties([
                             'STPWB': 'ALL'
                         ]
                         // Pre-select some options if needed
-                        def defaultValue = ['ALL']
+                        def defaultValue = 'STPWB'
                         if (op == 'ssh_runner.py') {
                         // Build checkbox list
-                        def html = new StringBuilder("<select name='value'>")
+                        def html = new StringBuilder("<b>Component</b><br><select name='value'>")
                         compmap.each { value, label ->
                             def selected = (value == defaultValue) ? 'selected' : ''
                             html.append("<option name='value' value='${value}' ${selected}>${label}</option>")
