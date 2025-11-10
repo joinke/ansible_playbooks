@@ -244,7 +244,7 @@ properties([
                 script: [
                     $class: 'SecureGroovyScript',
                     sandbox: true,
-                    script: """
+                    script: '''
                         def hostMap2 = [
                             'UAT01': [
                                 'RCC': [
@@ -285,7 +285,7 @@ properties([
                         }
                         html.append("</select>")
                         return html.toString()
-                    """
+                    '''
                 ]
             ]
         ]
