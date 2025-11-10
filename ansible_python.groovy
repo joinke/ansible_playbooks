@@ -1,12 +1,8 @@
-import groovy.json.JsonOutput
-
 def envMap = [
     'UAT01': 'UAT01',
     'UAT02': 'UAT02',
     'UAT03': 'UAT03'
 ]
-def envMapJson = JsonOutput.toJson(envMap)
-
 def siteMap = [
     'RCC': 'RCC',
     'WSDC': 'WSDC',
@@ -19,7 +15,6 @@ def compMap = [
     'WB': 'WB',
     'STPWB': 'ALL'
 ]
-def compMapJson = JsonOutput.toJson(compMap)
 
 def hostMap = [
     'UAT01': [
@@ -47,7 +42,6 @@ def hostMap = [
         ]
     ]
 ]
-def hostMapJson = JsonOutput.toJson(hostMap)
 
 def getSelectedKeys(mymap, boolString) {
     def bools = boolString.split(',').collect { it.trim().toBoolean() }
@@ -142,7 +136,6 @@ properties([
                     $class: 'SecureGroovyScript',
                     sandbox: true,
                     script: '''
-                        import groovy.json.JsonSlurper
                         def envMap = [
                             'UAT01': 'UAT01',
                             'UAT02': 'UAT02',
@@ -181,8 +174,11 @@ properties([
                     $class: 'SecureGroovyScript',
                     sandbox: true,
                     script: '''
-                        import groovy.json.JsonSlurper
-                        def compMap = new JsonSlurper().parseText('${compMapJson}')
+                        def compMap = [
+                            'STP': 'STP',
+                            'WB': 'WB',
+                            'STPWB': 'ALL'
+                        ]
                         def op = OPERATION?.trim()
                         // Pre-select some options if needed
                         def defaultValue = 'STPWB'
@@ -214,8 +210,11 @@ properties([
                     $class: 'SecureGroovyScript',
                     sandbox: true,
                     script: '''
-                        import groovy.json.JsonSlurper
-                        def siteMap = new JsonSlurper().parseText('${siteMapJson}')
+                        def siteMap = [
+                            'RCC': 'RCC',
+                            'WSDC': 'WSDC',
+                            'ALL': 'BOTH'
+                        ]
                         def op = OPERATION?.trim()
                         // Pre-select some options if needed
                         def defaultValue = 'ALL'
@@ -247,8 +246,32 @@ properties([
                     $class: 'SecureGroovyScript',
                     sandbox: true,
                     script: """
-                        import groovy.json.JsonSlurper
-                        def hostMap = new JsonSlurper().parseText('${hostMapJson}')
+                        def hostMap = [
+                            'UAT01': [
+                                'RCC': [
+                                    'STP': ['hosta','hostb'],
+                                    'WB' : ['hostc','hostd'],
+                                    'STPWB': ['hosta','hostb','hostc','hostd']
+                                ],
+                                'WSDC': [
+                                    'STP': ['hoste','hostf'],
+                                    'WB' : ['hostg','hosth'],
+                                    'STPWB': ['hoste','hostf','hostg','hosth']
+                                ]
+                            ],
+                            'UAT02': [
+                                'RCC': [
+                                    'STP': ['hosti','hostj'],
+                                    'WB' : ['hostk','hostl'],
+                                    'STPWB': ['hosti','hostj','hostk','hostl']
+                                ],
+                                'WSDC': [
+                                    'STP': ['hostm','hostn'],
+                                    'WB' : ['hosto','hostp'],
+                                    'STPWB': ['hostm','hostn','hosto','hostp']
+                                ]
+                            ]
+                        ]
                         def env = ENVIRONMENT
                         def site = SITE
                         def comp = COMPONENT
