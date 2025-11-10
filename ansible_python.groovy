@@ -86,40 +86,6 @@ properties([
             ]
         ],
         [
-          $class: 'CascadeChoiceParameter',
-          choiceType: 'PT_CHECKBOX',
-          description: 'Select environment(s)',
-          filterLength: 1,
-          filterable: false,
-          name: 'TEST',
-          randomName: 'choice-parameter-ENVS',
-          referencedParameters: 'OPERATION',
-          script: [
-            $class: 'GroovyScript',
-            script: [
-              sandbox: true,
-              script: '''
-                  def op = OPERATION?.trim()
-                  def envMap = ['UAT01': 'UAT01', 'UAT02': 'UAT02', 'UAT03': 'UAT03']
-                  def defaultSelected = ['UAT02']
-    
-                  if (op == 'ssh_runner.py') {
-                    def html = new StringBuilder("<b>Environment</b><br>")
-                    envMap.each { value, label ->
-                      def checked = (value in defaultSelected) ? 'checked' : ''
-                      html.append("<label>")
-                      html.append("<input type='checkbox' name=\'value\' value=\'${value}\' ${checked}> ${label}")
-                      html.append("</label><br>")
-                    }
-                    return html.toString()
-                  } else {
-                    return ''
-                  }
-              '''
-            ]
-          ]
-        ],
-        [
             $class: 'DynamicReferenceParameter',
             name: '\u200B',
             choiceType: 'ET_FORMATTED_HTML',
