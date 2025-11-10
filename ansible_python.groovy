@@ -4,6 +4,9 @@ def envMap = [
     'UAT03': 'UAT03'
 ]
 
+// Serialize branchMap to JSON
+def envMapJson = JsonOutput.toJson(envMap)
+
 def getSelectedKeys(mymap, boolString) {
     def bools = boolString.split(',').collect { it.trim().toBoolean() }
     def keys = mymap.keySet().toList()
@@ -103,12 +106,16 @@ properties([
                             'UAT02': 'UAT02',
                             'UAT03': 'UAT03'
                         ]
+                        import groovy.json.JsonSlurper
+
+                        // Deserialize JSON back into a map
+                        def envMap = new JsonSlurper().parseText('${envMapJson}')
                         // Pre-select some options if needed
                         def defaultSelected = ['UAT02']
                         if (op == 'ssh_runner.py') {
                         // Build checkbox list
                         def html = new StringBuilder("<b>Environment</b><br>")
-                        environmentmap.each { value, label ->
+                        envMap.each { value, label ->
                             def checked = (value in defaultSelected) ? 'checked' : ''
                             html.append("<label>")
                             html.append("<input type='checkbox' name='value' value='${value}' ${checked}> ${label}")
