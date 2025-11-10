@@ -3,9 +3,21 @@ def envMap = [
     'UAT02': 'UAT02',
     'UAT03': 'UAT03'
 ]
-
-// Serialize branchMap to JSON
 def envMapJson = JsonOutput.toJson(envMap)
+
+def siteMap = [
+    'RCC': 'RCC',
+    'WSDC': 'WSDC',
+    'ALL': 'BOTH'
+]
+def siteMapJson = JsonOutput.toJson(siteMap)
+
+def compMap = [
+    'STP': 'STP',
+    'WB': 'WB',
+    'STPWB': 'ALL'
+]
+def compMapJson = JsonOutput.toJson(compMap)
 
 def getSelectedKeys(mymap, boolString) {
     def bools = boolString.split(',').collect { it.trim().toBoolean() }
@@ -101,8 +113,8 @@ properties([
                     sandbox: true,
                     script: '''
                         import groovy.json.JsonSlurper
-                        def op = OPERATION?.trim()
                         def envMap = new JsonSlurper().parseText('${envMapJson}')
+                        def op = OPERATION?.trim()
                         def defaultSelected = ['UAT02']
                         
                         if (op == 'ssh_runner.py') {
@@ -135,18 +147,15 @@ properties([
                     $class: 'SecureGroovyScript',
                     sandbox: true,
                     script: '''
+                        import groovy.json.JsonSlurper
+                        def compMap = new JsonSlurper().parseText('${compMapJson}')
                         def op = OPERATION?.trim()
-                        def compmap = [
-                            'STP': 'STP',
-                            'WB': 'WB',
-                            'STPWB': 'ALL'
-                        ]
                         // Pre-select some options if needed
                         def defaultValue = 'STPWB'
                         if (op == 'ssh_runner.py') {
                         // Build checkbox list
                         def html = new StringBuilder("<b>Component</b><br><select name='value'>")
-                        compmap.each { value, label ->
+                        compMap.each { value, label ->
                             def selected = (value == defaultValue) ? 'selected' : ''
                             html.append("<option name='value' value='${value}' ${selected}>${label}</option>")
                         }
@@ -171,18 +180,15 @@ properties([
                     $class: 'SecureGroovyScript',
                     sandbox: true,
                     script: '''
+                        import groovy.json.JsonSlurper
+                        def siteMap = new JsonSlurper().parseText('${siteMapJson}')
                         def op = OPERATION?.trim()
-                        def compmap = [
-                            'RCC': 'RCC',
-                            'WSDC': 'WSDC',
-                            'ALL': 'BOTH'
-                        ]
                         // Pre-select some options if needed
                         def defaultValue = 'ALL'
                         if (op == 'ssh_runner.py') {
                         // Build checkbox list
                         def html = new StringBuilder("<b>Site</b><br><select name='value'>")
-                        compmap.each { value, label ->
+                        siteMap.each { value, label ->
                             def selected = (value == defaultValue) ? 'selected' : ''
                             html.append("<option name='value' value='${value}' ${selected}>${label}</option>")
                         }
