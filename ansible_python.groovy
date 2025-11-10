@@ -143,7 +143,11 @@ properties([
                     sandbox: true,
                     script: '''
                         import groovy.json.JsonSlurper
-                        def envMap = new JsonSlurper().parseText('${envMapJson}')
+                        def envMap = [
+                            'UAT01': 'UAT01',
+                            'UAT02': 'UAT02',
+                            'UAT03': 'UAT03'
+                        ]
                         def op = OPERATION?.trim()
                         def defaultSelected = ['UAT02']
                         
