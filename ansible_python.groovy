@@ -8,7 +8,6 @@ def siteMap = [
     'WSDC': 'WSDC',
     'ALL': 'BOTH'
 ]
-def siteMapJson = JsonOutput.toJson(siteMap)
 
 def compMap = [
     'STP': 'STP',
