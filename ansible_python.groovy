@@ -200,7 +200,7 @@ properties([
         ],
         [
             $class: 'DynamicReferenceParameter',
-            name: '\u200D',
+            name: 'SITE',
             choiceType: 'ET_FORMATTED_HTML',
             omitValueField: true,
             referencedParameters: 'OPERATION',
@@ -236,7 +236,7 @@ properties([
             name: 'HOSTS',
             choiceType: 'ET_FORMATTED_HTML',
             omitValueField: true,
-            referencedParameters: '\u200B,\u200D,\u200C',
+            referencedParameters: '\u200B,SITE,\u200C',
             script: [
                 $class: 'GroovyScript',
                 script: [
@@ -246,7 +246,7 @@ properties([
                         import groovy.json.JsonSlurper
                         def hostMap = new JsonSlurper().parseText('${hostMapJson}')
                         def env = \u200B
-                        def site = \u200D
+                        def site = SITE
                         def comp = \u200C
                         println "env=${env}, site=${site}, comp=${comp}"
                         def hosts = hostMap[env][site][comp]
