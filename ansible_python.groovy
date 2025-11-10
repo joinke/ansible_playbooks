@@ -1,3 +1,5 @@
+import groovy.json.JsonOutput
+
 def envMap = [
     'UAT01': 'UAT01',
     'UAT02': 'UAT02',
