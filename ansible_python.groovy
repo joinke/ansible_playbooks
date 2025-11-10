@@ -271,7 +271,7 @@ properties([
                                 ]
                             ]
                         ]
-                        def hosts = hostMap['\u200B']['RCC']['STP']
+                        def hosts = hostMap[\u200B]['RCC']['STP']
                         def html = new StringBuilder("<select multiple name='value'>")
                         hosts.each { h ->
                             html.append("<option value='${h}'>${h}</option>")
