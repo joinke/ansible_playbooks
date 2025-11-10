@@ -100,18 +100,11 @@ properties([
                     $class: 'SecureGroovyScript',
                     sandbox: true,
                     script: '''
-                        def op = OPERATION?.trim()
-                        def environmentmap = [
-                            'UAT01': 'UAT01',
-                            'UAT02': 'UAT02',
-                            'UAT03': 'UAT03'
-                        ]
                         import groovy.json.JsonSlurper
-
-                        // Deserialize JSON back into a map
+                        def op = OPERATION?.trim()
                         def envMap = new JsonSlurper().parseText('${envMapJson}')
-                        // Pre-select some options if needed
                         def defaultSelected = ['UAT02']
+                        
                         if (op == 'ssh_runner.py') {
                         // Build checkbox list
                         def html = new StringBuilder("<b>Environment</b><br>")
