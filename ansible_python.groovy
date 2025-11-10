@@ -252,9 +252,6 @@ properties([
                         def hosts = hostMap[env][site][comp]
 
                         def html = new StringBuilder("<select name='value'>")
-                        //hosts.each { h ->
-                        //    html.append("<option value='${h}'>${h}</option>")
-                        //}
                         html.append("</select>")
 
                         return html.toString()
