@@ -245,7 +245,7 @@ properties([
                     $class: 'SecureGroovyScript',
                     sandbox: true,
                     script: """
-                        def hostMap = [
+                        def hostMap2 = [
                             'UAT01': [
                                 'RCC': [
                                     'STP': ['hosta','hostb'],
@@ -271,16 +271,19 @@ properties([
                                 ]
                             ]
                         ]
-                        def env = ENVIRONMENT
-                        def site = SITE
-                        def comp = COMPONENT
+                        def hostMap = [
+                            'UAT01': [
+                                'RCC': [
+                                    'STP': ['hosta','hostb']
+                                ]
+                            ]
+                        ]
                         def hosts = hostMap['UAT01']['RCC']['STP']
                         def html = new StringBuilder("<select name='value'>")
                         hosts.each { h ->
                             html.append("<option value='${h}'>${h}</option>")
                         }
                         html.append("</select>")
-        
                         return html.toString()
                     """
                 ]
