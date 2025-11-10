@@ -249,7 +249,7 @@ properties([
                         def site = \u200D
                         def comp = \u200C
 
-                        def hosts = hostMap[env][site][comp]
+                        def hosts = hostMap['\u200B']['\u200D']['\u200C']
 
                         def html = new StringBuilder("<select name='value'>")
                         hosts.each { h ->
