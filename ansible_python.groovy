@@ -281,10 +281,11 @@ properties([
                                 ]
                             ]
                         ]
-                        def hosts = hostMap[\u200B][\u200D][\u200C]
+                        envs = \u200B
+                        def hosts = hostMap[envs][\u200D][\u200C]
                         def html = new StringBuilder("<select multiple name='value' size='8'>")
                         hosts.each { h ->
-                            html.append("<option value='${h}'>${h} ${\u200B}</option>")
+                            html.append("<option value='${h}'>${h}</option>")
                         }
                         html.append("</select>")
                         return html.toString()
