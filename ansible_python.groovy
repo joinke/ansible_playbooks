@@ -256,7 +256,8 @@ properties([
                                     'STP': ['hoste','hostf'],
                                     'WB' : ['hostg','hosth'],
                                     'STPWB': ['hoste','hostf','hostg','hosth']
-                                ]
+                                ],
+                                'ALL':['hosta','hostb','hostc','hostd','hoste','hostf','hostg','hosth']
                             ],
                             'UAT02': [
                                 'RCC': [
@@ -268,7 +269,8 @@ properties([
                                     'STP': ['hostm','hostn'],
                                     'WB' : ['hosto','hostp'],
                                     'STPWB': ['hostm','hostn','hosto','hostp']
-                                ]
+                                ],
+                                'ALL':['hosti','hostj','hostk','hostl','hostm','hostn','hosto','hostp']
                             ]
                         ]
                         def hosts = hostMap[\u200B][\u200D][\u200C]
