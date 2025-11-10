@@ -274,7 +274,7 @@ properties([
                         def env = ENVIRONMENT
                         def site = SITE
                         def comp = COMPONENT
-                        def hosts = hostMap['UAT01]['RCC']['STP']
+                        def hosts = hostMap['UAT01']['RCC']['STP']
                         def html = new StringBuilder("<select name='value'>")
                         hosts.each { h ->
                             html.append("<option value='${h}'>${h}</option>")
