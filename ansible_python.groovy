@@ -132,7 +132,7 @@ properties([
         ],
         [
             $class: 'DynamicReferenceParameter',
-            name: '\u200B',
+            name: 'ENVIRONMENT',
             choiceType: 'ET_FORMATTED_HTML',
             omitValueField: true,
             referencedParameters: 'OPERATION',
@@ -236,7 +236,7 @@ properties([
             name: 'HOSTS',
             choiceType: 'ET_FORMATTED_HTML',
             omitValueField: true,
-            referencedParameters: '\u200B,SITE,\u200C',
+            referencedParameters: 'ENVIRONMENT,SITE,\u200C',
             script: [
                 $class: 'GroovyScript',
                 script: [
