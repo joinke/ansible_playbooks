@@ -19,6 +19,34 @@ def compMap = [
 ]
 def compMapJson = JsonOutput.toJson(compMap)
 
+def hostMap = [
+    'UAT01': [
+        'RCC': [
+            'STP': ['hosta','hostb'],
+            'WB' : ['hostc','hostd'],
+            'STPWB': ['hosta','hostb','hostc','hostd']
+        ],
+        'WSDC': [
+            'STP': ['hoste','hostf'],
+            'WB' : ['hostg','hosth'],
+            'STPWB': ['hoste','hostf','hostg','hosth']
+        ]
+    ],
+    'UAT02': [
+        'RCC': [
+            'STP': ['hosti','hostj'],
+            'WB' : ['hostk','hostl'],
+            'STPWB': ['hosti','hostj','hostk','hostl']
+        ],
+        'WSDC': [
+            'STP': ['hostm','hostn'],
+            'WB' : ['hosto','hostp'],
+            'STPWB': ['hostm','hostn','hosto','hostp']
+        ]
+    ]
+]
+def hostMapJson = JsonOutput.toJson(hostMap)
+
 def getSelectedKeys(mymap, boolString) {
     def bools = boolString.split(',').collect { it.trim().toBoolean() }
     def keys = mymap.keySet().toList()
@@ -170,7 +198,7 @@ properties([
         ],
         [
             $class: 'DynamicReferenceParameter',
-            name: '\u200C',
+            name: '\u200D',
             choiceType: 'ET_FORMATTED_HTML',
             omitValueField: true,
             referencedParameters: 'OPERATION',
@@ -198,6 +226,37 @@ properties([
                           return ''
                         }
                     '''
+                ]
+            ]
+        ],
+        [
+            $class: 'DynamicReferenceParameter',
+            name: 'HOSTS',
+            choiceType: 'ET_FORMATTED_HTML',
+            omitValueField: true,
+            referencedParameters: '\u200B,\u200D,\u200C',
+            script: [
+                $class: 'GroovyScript',
+                script: [
+                    $class: 'SecureGroovyScript',
+                    sandbox: true,
+                    script: """
+                        import groovy.json.JsonSlurper
+                        def hostMap = new JsonSlurper().parseText('${hostMapJson}')
+                        def env = \u200B
+                        def site = \u200D
+                        def comp = \u200C
+
+                        def hosts = hostMap[env][site][comp]
+
+                        def html = new StringBuilder("<select name='value'>")
+                        hosts.each { h ->
+                            html.append("<option value='${h}'>${h}</option>")
+                        }
+                        html.append("</select>")
+
+                        return html.toString()
+                    """
                 ]
             ]
         ]
