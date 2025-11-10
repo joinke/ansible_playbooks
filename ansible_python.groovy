@@ -281,7 +281,9 @@ properties([
                                 ]
                             ]
                         ]
-                        envs = \u200B
+                        def envs = \u200B instanceof List ? \u200B : [\u200B]
+                        def site = \u200D
+                        def comp = \u200C
                         def hosts = hostMap[envs][\u200D][\u200C]
                         def html = new StringBuilder("<select multiple name='value' size='8'>")
                         hosts.each { h ->
