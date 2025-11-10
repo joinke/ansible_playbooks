@@ -248,7 +248,7 @@ properties([
                         def env = ENVIRONMENT
                         def site = SITE
                         def comp = COMPONENT
-                        println "env=${env}, site=${site}, comp=${comp}"
+                        //println "env=${env}, site=${site}, comp=${comp}"
                         def hosts = hostMap[env][site][comp]
 
                         def html = new StringBuilder("<select name='value'>")
