@@ -248,8 +248,8 @@ properties([
                         def env = \u200B
                         def site = \u200D
                         def comp = \u200C
-
-                        def hosts = hostMap['\u200B']['\u200D']['\u200C']
+                        println "env=${env}, site=${site}, comp=${comp}"
+                        def hosts = hostMap[env][site][comp]
 
                         def html = new StringBuilder("<select name='value'>")
                         hosts.each { h ->
