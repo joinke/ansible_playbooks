@@ -125,7 +125,7 @@ properties([
         ],
         [
             $class: 'DynamicReferenceParameter',
-            name: 'ENVIRONMENT',
+            name: '\u200B',
             choiceType: 'ET_FORMATTED_HTML',
             omitValueField: true,
             referencedParameters: 'OPERATION',
@@ -238,7 +238,7 @@ properties([
             name: 'HOSTS',
             choiceType: 'ET_FORMATTED_HTML',
             omitValueField: true,
-            referencedParameters: 'ENVIRONMENT,SITE,COMPONENT',
+            referencedParameters: '\u200B,SITE,COMPONENT',
             script: [
                 $class: 'GroovyScript',
                 script: [
@@ -271,7 +271,7 @@ properties([
                                 ]
                             ]
                         ]
-                        def hosts = hostMap['UAT01']['RCC']['STP']
+                        def hosts = hostMap['\u200B']['RCC']['STP']
                         def html = new StringBuilder("<select multiple name='value'>")
                         hosts.each { h ->
                             html.append("<option value='${h}'>${h}</option>")
