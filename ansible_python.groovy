@@ -231,7 +231,7 @@ properties([
         ],
         [
             $class: 'DynamicReferenceParameter',
-            name: 'HOSTS',
+            name: '\u2060',
             choiceType: 'ET_FORMATTED_HTML',
             omitValueField: true,
             referencedParameters: '\u200B,\u200D,\u200C,INDIVIDUAL',
@@ -290,7 +290,7 @@ properties([
                             }
                         }.unique()
                         if (INDIVIDUAL) {
-                            def html = new StringBuilder("<select multiple name='value' size='8'>")
+                            def html = new StringBuilder("<b>Hosts</b><select multiple name='value' size='8'>")
                             hosts.each { h ->
                                 html.append("<option value='${h}'>${h}</option>")
                             }
