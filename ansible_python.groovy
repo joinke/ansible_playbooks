@@ -3,40 +3,6 @@ def envMap = [
     'UAT02': 'UAT02',
     'UAT03': 'UAT03'
 ]
-def siteMap = [
-    'RCC': 'RCC',
-    'WSDC': 'WSDC',
-    'ALL': 'BOTH'
-]
-
-def compMap = [
-    'STP': 'STP',
-    'WB': 'WB',
-    'STPWB': 'ALL'
-]
-
-def hostMap = [
-    'UAT01': [
-        'RCC': [
-            'STP': ['hosta','hostb'],
-            'WB' : ['hostc','hostd']
-        ],
-        'WSDC': [
-            'STP': ['hoste','hostf'],
-            'WB' : ['hostg','hosth']
-        ]
-    ],
-    'UAT02': [
-        'RCC': [
-            'STP': ['hosti','hostj'],
-            'WB' : ['hostk','hostl']
-        ],
-        'WSDC': [
-            'STP': ['hostm','hostn'],
-            'WB' : ['hosto','hostp']
-        ]
-    ]
-]
 
 def getSelectedKeys(mymap, boolString) {
     def bools = boolString.split(',').collect { it.trim().toBoolean() }
@@ -244,7 +210,7 @@ properties([
                         def hostMap = [
                             'UAT01': [
                                 'RCC': [
-                                    'STP': ['hosta','hostb'],
+                                    'STP': ['192.168.70.175','192.168.70.193'],
                                     'WB' : ['hostc','hostd']
                                 ],
                                 'WSDC': [
@@ -329,6 +295,8 @@ pipeline {
             env.SELECTEDENVS = "$environments"
             env.SELECTEDCOMP = "${env.COMPS ?: ''}"
             env.SELECTEDSITE = "${env.SITE ?: ''}"
+            env.SELECTEDHOSTS = "${env.MYHOSTS ?: ''}"
+            
             echo "Selected environments: ${environments}"
             echo "Selected components: ${env.COMPS}"
             echo "Selected site: ${env.SITE}"
