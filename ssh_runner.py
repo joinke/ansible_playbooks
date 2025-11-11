@@ -9,10 +9,6 @@ SELECTEDENVS = os.getenv("SELECTEDENVS","")
 SELECTEDCOMP = os.getenv("SELECTEDCOMP","")
 SELECTEDSITE = os.getenv("SELECTEDSITE","")
 
-runner = SSHRunner(
-    hosts = HOSTS,
-    max_workers=10
-)
 resolver = HostResolver()
 HOSTS = resolver.get_hosts(SELECTEDENVS, SELECTEDSITE , SELECTEDCOMP)
 runner = SSHRunner(
