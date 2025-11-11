@@ -289,7 +289,7 @@ properties([
                             hostMap[env]?.get(site)?.get(comp) ?: []
                         }.unique()
                         //def hosts = hostMap[envs][site][comp]
-                        def html = new StringBuilder("<b>${hosts}</b><select multiple name='value' size='8'>")
+                        def html = new StringBuilder("<b>${\u200B}</b><select multiple name='value' size='8'>")
                         hosts.each { h ->
                             html.append("<option value='${h}'>${h}</option>")
                         }
