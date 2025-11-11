@@ -33,7 +33,7 @@ properties([
                         def commandMap = [
                             'example1.py': 'Stop AMH',
                             'example.py': 'Start AMH',
-                            'example3.py': 'Restart AMH'
+                            'example3.py': 'Restart AMH',
                         ]
                         // Select the first option by default
                         def defaultValue = commandMap.keySet().iterator().next()
