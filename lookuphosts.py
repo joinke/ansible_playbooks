@@ -4,22 +4,22 @@ class HostResolver:
         self.host_map = {
             "UAT01": {
                 "RCC": {
-                    "STP": ["hosta","hostb"],
-                    "WB":  ["hostc","hostd"]
+                    "STP": ["uat01_rcc_stp01","uat01_rcc_stp02"],
+                    "WB":  ["uat01_rcc_wb01"]
                 },
                 "WSDC": {
-                    "STP": ["hoste","hostf"],
-                    "WB":  ["hostg","hosth"]
+                    "STP": ["uat01_wsdc_stp01","uat01_wsdc_stp02"],
+                    "WB":  ["uat01_wsdc_wb01"]
                 }
             },
             "UAT02": {
                 "RCC": {
-                    "STP": ["hosti","hostj"],
-                    "WB":  ["hostk","hostl"]
+                    "STP": ["uat02_rcc_stp01"],
+                    "WB":  ["uat02_rcc_wb01"]
                 },
                 "WSDC": {
-                    "STP": ["hostm","hostn"],
-                    "WB":  ["hosto","hostp"]
+                    "STP": ["uat02_wsdc_stp01"],
+                    "WB":  ["uat02_wsdc_wb01","uat02_wsdc_wb02"]
                 }
             }
         }
