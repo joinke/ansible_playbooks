@@ -281,13 +281,27 @@ properties([
                                 ]
                             ]
                         ]
-                        //def envs = \u200B instanceof List ? \u200B : [\u200B]
+                        
                         def envs = \u200B.split(',')*.trim()
                         def site = \u200D
                         def comp = \u200C
                         // Collect hosts from all selected environments
                         def hosts = envs.collectMany { env ->
-                            hostMap[env]?.get(site)?.get(comp) ?: []
+                            def envMap = hostMap[env] ?: [:]
+                        
+                            // If site == ALL, take all sites
+                            def sitesToUse = (site == 'ALL') ? envMap.keySet() : [site]
+                        
+                            sitesToUse.collectMany { s ->
+                                def compMap = envMap[s] ?: [:]
+                        
+                                // If comp == STPWB, take both STP and WB
+                                def compsToUse = (comp == 'STPWB') ? ['STP','WB'] : [comp]
+                        
+                                compsToUse.collectMany { c ->
+                                    compMap[c] ?: []
+                                }
+                            }
                         }.unique()
                         //def hosts = hostMap[envs][site][comp]
                         def html = new StringBuilder("<b>${\u200B}</b><select multiple name='value' size='8'>")
