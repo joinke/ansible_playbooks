@@ -31,9 +31,9 @@ properties([
                     sandbox: true,
                     script: '''
                         def commandMap = [
-                            'ssh_runner1.py': 'Stop AMH',
-                            'ssh_runner.py': 'Start AMH',
-                            'ssh_runner3.py': 'Restart AMH',
+                            'amhstop': 'Stop AMH',
+                            'amhstart': 'Start AMH',
+                            'amhrestart': 'Restart AMH',
                         ]
 
                         // Select the first option by default
@@ -296,6 +296,7 @@ pipeline {
             env.SELECTEDCOMP = "${env.COMPS ?: ''}"
             env.SELECTEDSITE = "${env.SITE ?: ''}"
             env.SELECTEDHOSTS = "${env.MYHOSTS ?: ''}"
+            env.SELECTEDOPERATION = "${env.OPERATION ?: ''}"
             
             echo "Selected environments: ${environments}"
             echo "Selected components: ${env.COMPS}"
@@ -310,7 +311,7 @@ pipeline {
             echo "🧩 Using SSH key from Jenkins: $SSH_KEY for user $SSH_USER and $OPERATION and envirionments $SELECTEDENVS and component $SELECTEDCOMP and site $SELECTEDSITE"
 
             # Run the Python wrapper (Ansible will use the key directly)
-            python3 -u $OPERATION
+            python3 -u ssh_runner.py
           '''
         }
       }
