@@ -29,7 +29,7 @@ print(f"My environments are {SELECTEDENVS} and components {SELECTEDCOMP} and  ho
 
 runner.run_command([
     "python3",
-    "/tmp/example.py",
+    f"/tmp/{SELECTEDOP}",
     "--fetch-dest",
     f"{WORKSPACE}/fetched/"
 ])
