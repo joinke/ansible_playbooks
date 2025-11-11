@@ -37,15 +37,15 @@ properties([
                         ]
                         // Select the first option by default
                         def defaultValue = commandMap.keySet().iterator().next()
-
+                        
                         // Build <select> dropdown
                         def html = new StringBuilder("<select name='value'>")
                         commandMap.each { value, label ->
-                            def  selected = (value == defaultValue) ? 'selected' : ''
-                            html.append("<option name='value' value='${value}' ${selected}>${label}</option>")
+                            def selected = (value == defaultValue) ? 'selected' : ''
+                            html.append("<option value='${value}' ${selected}>${label}</option>")
                         }
                         html.append("</select>")
-
+                        
                         return html.toString()
                     '''
                 ]
