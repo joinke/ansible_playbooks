@@ -33,9 +33,8 @@ properties([
                         def commandMap = [
                             'example1.py': 'Stop AMH',
                             'example.py': 'Start AMH',
-                            'example3.py': 'Restart AMH',
+                            'example3.py': 'Restart AMH'
                         ]
-
                         // Select the first option by default
                         def defaultValue = commandMap.keySet().iterator().next()
 
@@ -65,22 +64,21 @@ properties([
                     sandbox: true,
                     script: '''
                         def op = OPERATION?.trim()
-                        def environmentmap = [
+                        def individualmap = [
                             'true': 'Individual Hosts',
                         ]
                         // Pre-select some options if needed
-                        def defaultSelected = ['UAT02']
+                        def defaultSelected = ['false']
                         
                         // Build checkbox list
                         def html = new StringBuilder()
-                        environmentmap.each { value, label ->
+                        individualmap.each { value, label ->
                             def checked = (value in defaultSelected) ? 'checked' : ''
                             html.append("<label>")
                             html.append("<input type='checkbox' name='value' value='${value}' ${checked}> ${label}")
                             html.append("</label><br>")
                         }
-                        return html.toString()
-                    
+                        return html.toString()                
                     '''
                 ]
             ]
@@ -308,7 +306,7 @@ pipeline {
                                            keyFileVariable: 'SSH_KEY',
                                            usernameVariable: 'SSH_USER')]) {
           sh '''
-            echo "🧩 Using SSH key from Jenkins: $SSH_KEY for user $SSH_USER and $OPERATION and envirionments $SELECTEDENVS and component $SELECTEDCOMP and site $SELECTEDSITE"
+            echo "🧩 Using SSH key from Jenkins: $SSH_KEY for user $SSH_USER and $OPERATION and envirionments $SELECTEDENVS and component $SELECTEDCOMP and site $SELECTEDSITE "
 
             # Run the Python wrapper (Ansible will use the key directly)
             python3 -u ssh_runner.py
