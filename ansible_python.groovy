@@ -290,7 +290,7 @@ properties([
                             }
                         }.unique()
                         if (INDIVIDUAL) {
-                            def html = new StringBuilder("<b>Hosts</b><select multiple name='value' size='8'>")
+                            def html = new StringBuilder("<label><b>Hosts</b></label><br><select multiple name='value' size='8'>")
                             hosts.each { h ->
                                 html.append("<option value='${h}'>${h}</option>")
                             }
