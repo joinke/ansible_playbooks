@@ -30,18 +30,18 @@ properties([
                     $class: 'SecureGroovyScript',
                     sandbox: true,
                     script: '''
-                        def branchMap = [
+                        def commandMap = [
                             'ssh_runner1.py': 'Stop AMH',
                             'ssh_runner.py': 'Start AMH',
                             'ssh_runner3.py': 'Restart AMH',
                         ]
 
                         // Select the first option by default
-                        def defaultValue = branchMap.keySet().iterator().next()
+                        def defaultValue = commandMap.keySet().iterator().next()
 
                         // Build <select> dropdown
                         def html = new StringBuilder("<select name='value'>")
-                        branchMap.each { value, label ->
+                        commandMap.each { value, label ->
                             def  selected = (value == defaultValue) ? 'selected' : ''
                             html.append("<option name='value' value='${value}' ${selected}>${label}</option>")
                         }
