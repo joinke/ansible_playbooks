@@ -294,7 +294,7 @@ properties([
                             }
                         }.unique()
                         //def hosts = hostMap[envs][site][comp]
-                        def html = new StringBuilder("<b>${\u200B}</b><select multiple name='value' size='8'>")
+                        def html = new StringBuilder("<select multiple name='value' size='8'>")
                         hosts.each { h ->
                             html.append("<option value='${h}'>${h}</option>")
                         }
