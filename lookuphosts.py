@@ -31,17 +31,17 @@ class HostResolver:
         comp: "STP", "WB", or "STPWB"
         Returns: CSV string of hostnames
         """
-def get_hosts(self, envs, site, comp):
-    # If envs is a string, split on commas
-    if isinstance(envs, str):
-        envs = [e.strip() for e in envs.split(",")]
-    hosts = []
-    for env in envs:
-        env_map = self.host_map.get(env, {})
-        sites_to_use = env_map.keys() if site in ("ALL", "BOTH") else [site]
-        for s in sites_to_use:
-            comp_map = env_map.get(s, {})
-            comps_to_use = ["STP","WB"] if comp == "STPWB" else [comp]
-            for c in comps_to_use:
-                hosts.extend(comp_map.get(c, []))
-    return ",".join(sorted(set(hosts)))
+    def get_hosts(self, envs, site, comp):
+        # If envs is a string, split on commas
+        if isinstance(envs, str):
+            envs = [e.strip() for e in envs.split(",")]
+        hosts = []
+        for env in envs:
+            env_map = self.host_map.get(env, {})
+            sites_to_use = env_map.keys() if site in ("ALL", "BOTH") else [site]
+            for s in sites_to_use:
+                comp_map = env_map.get(s, {})
+                comps_to_use = ["STP","WB"] if comp == "STPWB" else [comp]
+                for c in comps_to_use:
+                    hosts.extend(comp_map.get(c, []))
+        return ",".join(sorted(set(hosts)))
