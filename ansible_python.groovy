@@ -281,7 +281,8 @@ properties([
                                 ]
                             ]
                         ]
-                        def envs = \u200B instanceof List ? \u200B : [\u200B]
+                        //def envs = \u200B instanceof List ? \u200B : [\u200B]
+                        def envs = \u200B.split(',')*.trim()
                         def site = \u200D
                         def comp = \u200C
                         // Collect hosts from all selected environments
