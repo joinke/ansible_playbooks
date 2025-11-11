@@ -8,6 +8,7 @@ WORKSPACE = os.getenv("WORKSPACE", "/tmp")
 HOSTS = os.getenv("HOST_LIST", "")
 SELECTEDENVS = os.getenv("SELECTEDENVS","")
 SELECTEDCOMP = os.getenv("SELECTEDCOMP","")
+SELECTEDSITE = os.genenv("SELECTEDSITE","")
 
 runner = SSHRunner(
     hosts = HOSTS,
@@ -15,7 +16,7 @@ runner = SSHRunner(
 )
 resolver = HostResolver()
 
-print(resolver.get_hosts(["UAT01"], "RCC", "STP"))
+print(resolver.get_hosts(SELECTEDENVS, SELECTEDSITE , SELECTEDCOMP))
 # → hosta,hostb
 
 print(resolver.get_hosts(["UAT01"], "ALL", "STPWB"))
