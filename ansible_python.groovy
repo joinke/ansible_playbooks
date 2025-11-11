@@ -19,25 +19,21 @@ def hostMap = [
     'UAT01': [
         'RCC': [
             'STP': ['hosta','hostb'],
-            'WB' : ['hostc','hostd'],
-            'STPWB': ['hosta','hostb','hostc','hostd']
+            'WB' : ['hostc','hostd']
         ],
         'WSDC': [
             'STP': ['hoste','hostf'],
-            'WB' : ['hostg','hosth'],
-            'STPWB': ['hoste','hostf','hostg','hosth']
+            'WB' : ['hostg','hosth']
         ]
     ],
     'UAT02': [
         'RCC': [
             'STP': ['hosti','hostj'],
-            'WB' : ['hostk','hostl'],
-            'STPWB': ['hosti','hostj','hostk','hostl']
+            'WB' : ['hostk','hostl']
         ],
         'WSDC': [
             'STP': ['hostm','hostn'],
-            'WB' : ['hosto','hostp'],
-            'STPWB': ['hostm','hostn','hosto','hostp']
+            'WB' : ['hosto','hostp']
         ]
     ]
 ]
@@ -238,7 +234,7 @@ properties([
             name: 'HOSTS',
             choiceType: 'ET_FORMATTED_HTML',
             omitValueField: true,
-            referencedParameters: '\u200B,\u200D,\u200C',
+            referencedParameters: '\u200B,\u200D,\u200C,INDIVIDUAL',
             script: [
                 $class: 'GroovyScript',
                 script: [
