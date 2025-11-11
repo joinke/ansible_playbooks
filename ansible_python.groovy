@@ -286,7 +286,7 @@ properties([
                         def comp = \u200C
                         // Collect hosts from all selected environments
                         def hosts = envs.collectMany { env ->
-                            hostMap[envs]?.get(site)?.get(comp) ?: []
+                            hostMap[env]?.get(site)?.get(comp) ?: []
                         }.unique()
                         //def hosts = hostMap[envs][\u200D][\u200C]
                         def html = new StringBuilder("<select multiple name='value' size='8'>")
