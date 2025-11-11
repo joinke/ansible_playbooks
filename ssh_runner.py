@@ -10,9 +10,13 @@ SELECTEDCOMP = os.getenv("SELECTEDCOMP","")
 SELECTEDSITE = os.getenv("SELECTEDSITE","")
 SELECTEDHOSTS = os.getenv("SELECTEDHOSTS","")
 
-resolver = HostResolver()
-# CSV of required hosts
-HOSTS = resolver.get_hosts(SELECTEDENVS, SELECTEDSITE , SELECTEDCOMP)
+if SELECTEDHOSTS and SELECTEDHOSTS.strip():
+    HOSTS = SELECTEDHOSTS
+else:
+    resolver = HostResolver()
+    # CSV of required hosts
+    HOSTS = resolver.get_hosts(SELECTEDENVS, SELECTEDSITE , SELECTEDCOMP)
+
 runner = SSHRunner(
     hosts = HOSTS,
     max_workers=10
