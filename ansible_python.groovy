@@ -331,7 +331,7 @@ pipeline {
             env.SELECTEDSITE = "${env.SITE ?: ''}"
             echo "Selected environments: ${environments}"
             echo "Selected components: ${env.COMPS}"
-            echo "Selected components: ${env.SITE}"
+            echo "Selected site: ${env.SITE}"
             echo "Selected hosts: ${env.MYHOSTS}"
             echo "Selected individual : ${env.INDIVIDUAL}"
         }
