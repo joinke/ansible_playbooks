@@ -249,35 +249,25 @@ properties([
                             'UAT01': [
                                 'RCC': [
                                     'STP': ['hosta','hostb'],
-                                    'WB' : ['hostc','hostd'],
-                                    'STPWB': ['hosta','hostb','hostc','hostd']
+                                    'WB' : ['hostc','hostd']
                                 ],
                                 'WSDC': [
                                     'STP': ['hoste','hostf'],
-                                    'WB' : ['hostg','hosth'],
-                                    'STPWB': ['hoste','hostf','hostg','hosth']
-                                ],
-                                'ALL':[
-                                    'STP' : ['hosta','hostb','hoste','hostf'],
-                                    'WB' : ['hostc','hostd','hostg','hosth'],
-                                    'STPWB':['hosta','hostb','hoste','hostf','hostc','hostd','hostg','hosth']
+                                    'WB' : ['hostg','hosth']
                                 ],
                             ],
                             'UAT02': [
                                 'RCC': [
                                     'STP': ['hosti','hostj'],
-                                    'WB' : ['hostk','hostl'],
-                                    'STPWB': ['hosti','hostj','hostk','hostl']
+                                    'WB' : ['hostk','hostl']
                                 ],
                                 'WSDC': [
                                     'STP': ['hostm','hostn'],
-                                    'WB' : ['hosto','hostp'],
-                                    'STPWB': ['hostm','hostn','hosto','hostp']
+                                    'WB' : ['hosto','hostp']
                                 ],
                                 'ALL':[
                                     'STP': ['hosti','hostj','hostm','hostn'],
-                                    'WB' : ['hostk','hostl','hosto','hostp'],
-                                    'STPWB':['hosti','hostj','hostm','hostn','hostk','hostl','hosto','hostp']
+                                    'WB' : ['hostk','hostl','hosto','hostp']
                                 ]
                             ]
                         ]
