@@ -8,6 +8,7 @@ WORKSPACE = os.getenv("WORKSPACE", "/tmp")
 SELECTEDENVS = os.getenv("SELECTEDENVS","")
 SELECTEDCOMP = os.getenv("SELECTEDCOMP","")
 SELECTEDSITE = os.getenv("SELECTEDSITE","")
+SELECTEDHOSTS = os.getenv("SELECTEDHOSTS","")
 
 resolver = HostResolver()
 # CSV of required hosts
