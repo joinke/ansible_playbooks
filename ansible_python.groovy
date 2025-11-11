@@ -31,9 +31,9 @@ properties([
                     sandbox: true,
                     script: '''
                         def commandMap = [
-                            'amhstop': 'Stop AMH',
-                            'amhstart': 'Start AMH',
-                            'amhrestart': 'Restart AMH',
+                            'example1.py': 'Stop AMH',
+                            'example.py': 'Start AMH',
+                            'example3.py': 'Restart AMH',
                         ]
 
                         // Select the first option by default
