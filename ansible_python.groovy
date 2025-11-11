@@ -289,13 +289,16 @@ properties([
                                 }
                             }
                         }.unique()
-                        //def hosts = hostMap[envs][site][comp]
-                        def html = new StringBuilder("<select multiple name='value' size='8'>")
-                        hosts.each { h ->
-                            html.append("<option value='${h}'>${h}</option>")
+                        if (INDIVIDUAL) {
+                            def html = new StringBuilder("<select multiple name='value' size='8'>")
+                            hosts.each { h ->
+                                html.append("<option value='${h}'>${h}</option>")
+                            }
+                            html.append("</select>")
+                            return html.toString()
+                        } else {
+                            return ''
                         }
-                        html.append("</select>")
-                        return html.toString()
                     '''
                 ]
             ]
