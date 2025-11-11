@@ -318,7 +318,7 @@ pipeline {
     ENVS = "${params['\u200B'] ?: ''}"
     COMPS = "${params['\u200C'] ?: ''}"
     SITE = "${params['\u200D'] ?: ''}"
-    MYHOSTS = "${params['\u2060'] ? : ''}"
+    MYHOSTS = "${params['\u2060'] ?: ''}"
     INDIVIDUAL = "${params.INDIVIDUAL}"
   }
   stages {
