@@ -284,7 +284,11 @@ properties([
                         def envs = \u200B instanceof List ? \u200B : [\u200B]
                         def site = \u200D
                         def comp = \u200C
-                        def hosts = hostMap[envs][\u200D][\u200C]
+                        // Collect hosts from all selected environments
+                        def hosts = envs.collectMany { env ->
+                            hostMap[envs]?.get(site)?.get(comp) ?: []
+                        }.unique()
+                        //def hosts = hostMap[envs][\u200D][\u200C]
                         def html = new StringBuilder("<select multiple name='value' size='8'>")
                         hosts.each { h ->
                             html.append("<option value='${h}'>${h}</option>")
