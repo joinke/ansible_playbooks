@@ -14,7 +14,7 @@ runner = SSHRunner(
     max_workers=10
 )
 resolver = HostResolver()
-HOSTS = resolver.get_hosts(SELECTEDENVS, SELECTEDSITE , SELECTEDCOMP))
+HOSTS = resolver.get_hosts(SELECTEDENVS, SELECTEDSITE , SELECTEDCOMP)
 runner = SSHRunner(
     hosts = HOSTS,
     max_workers=10
