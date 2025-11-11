@@ -15,16 +15,7 @@ runner = SSHRunner(
     max_workers=10
 )
 resolver = HostResolver()
-
 print(resolver.get_hosts(SELECTEDENVS, SELECTEDSITE , SELECTEDCOMP))
-# → hosta,hostb
-
-print(resolver.get_hosts(["UAT01"], "ALL", "STPWB"))
-# → hosta,hostb,hostc,hostd,hoste,hostf,hostg,hosth
-
-print(resolver.get_hosts(["UAT01","UAT02"], "BOTH", "WB"))
-# → hostc,hostd,hostg,hosth,hostk,hostl,hosto,hostp
-
 
 # Run any command, e.g., your Python script with arguments
 print(f"My environments are {SELECTEDENVS} and components {SELECTEDCOMP}")
