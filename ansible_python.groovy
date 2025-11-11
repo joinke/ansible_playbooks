@@ -318,6 +318,8 @@ pipeline {
     ENVS = "${params['\u200B'] ?: ''}"
     COMPS = "${params['\u200C'] ?: ''}"
     SITE = "${params['\u200D'] ?: ''}"
+    MYHOSTS = "${params['\u2060'] ? : ''}"
+    INDIVIDUAL = "${params.INDIVIDUAL}"
   }
   stages {
     stage('Run Ansible via Python') {
@@ -328,8 +330,10 @@ pipeline {
             env.SELECTEDCOMP = "${env.COMPS ?: ''}"
             env.SELECTEDSITE = "${env.SITE ?: ''}"
             echo "Selected environments: ${environments}"
-            echo "Selected components: ${env.SELECTEDCOMP}"
-            echo "Selected components: ${env.SELECTEDSITE}"
+            echo "Selected components: ${env.COMPS}"
+            echo "Selected components: ${env.SITE}"
+            echo "Selected hosts: ${env.MYHOSTS}"
+            echo "Selected individual : ${env.INDIVIDUAL}"
         }
         withCredentials([sshUserPrivateKey(credentialsId: '00b69538-5290-4373-a385-c2e59e5a4d9f',
                                            keyFileVariable: 'SSH_KEY',
