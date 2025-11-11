@@ -5,6 +5,7 @@ from environmenthosts import EnvironmentHosts
 from lookuphosts import HostResolver
 
 WORKSPACE = os.getenv("WORKSPACE", "/tmp")
+SELECTEDOP = os.getenv("SELECTEDOPERATION","")
 SELECTEDENVS = os.getenv("SELECTEDENVS","")
 SELECTEDCOMP = os.getenv("SELECTEDCOMP","")
 SELECTEDSITE = os.getenv("SELECTEDSITE","")
