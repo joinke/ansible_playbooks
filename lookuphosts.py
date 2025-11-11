@@ -4,8 +4,8 @@ class HostResolver:
         self.host_map = {
             "UAT01": {
                 "RCC": {
-                    "STP": ["uat01_rcc_stp01","uat01_rcc_stp02"],
-                    "WB":  ["uat01_rcc_wb01"]
+                    "STP": ["192.168.70.175","192.168.70.193"],
+                    "WB":  ["192.168.70.175"]
                 },
                 "WSDC": {
                     "STP": ["uat01_wsdc_stp01","uat01_wsdc_stp02"],
