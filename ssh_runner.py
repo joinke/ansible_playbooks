@@ -8,7 +8,7 @@ WORKSPACE = os.getenv("WORKSPACE", "/tmp")
 HOSTS = os.getenv("HOST_LIST", "")
 SELECTEDENVS = os.getenv("SELECTEDENVS","")
 SELECTEDCOMP = os.getenv("SELECTEDCOMP","")
-SELECTEDSITE = os.genenv("SELECTEDSITE","")
+SELECTEDSITE = os.getenv("SELECTEDSITE","")
 
 runner = SSHRunner(
     hosts = HOSTS,
