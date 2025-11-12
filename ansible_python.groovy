@@ -146,7 +146,7 @@ properties([
                         def html = new StringBuilder("<b>Component</b><br><select name='value'>")
                         compMap.each { value, label ->
                             def selected = (value == defaultValue) ? 'selected' : ''
-                            html.append("<option name='value' value='${value}' ${selected}>${label}</option>")
+                            html.append("<option value='${value}' ${selected}>${label}</option>")
                         }
                         html.append("</select>")
                         return html.toString()
