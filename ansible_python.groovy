@@ -103,7 +103,7 @@ properties([
                         def op = OPERATION?.trim()
                         def defaultSelected = ['UAT02']
                         
-                        if (op == 'ssh_runner.py') {
+                        if (op == 'example.py') {
                         // Build checkbox list
                         def html = new StringBuilder("<b>Environment</b><br>")
                         envMap.each { value, label ->
@@ -141,7 +141,7 @@ properties([
                         def op = OPERATION?.trim()
                         // Pre-select some options if needed
                         def defaultValue = 'STPWB'
-                        if (op == 'ssh_runner.py') {
+                        if (op == 'example.py') {
                         // Build checkbox list
                         def html = new StringBuilder("<b>Component</b><br><select name='value'>")
                         compMap.each { value, label ->
@@ -177,7 +177,7 @@ properties([
                         def op = OPERATION?.trim()
                         // Pre-select some options if needed
                         def defaultValue = 'ALL'
-                        if (op == 'ssh_runner.py') {
+                        if (op == 'example.py') {
                         // Build checkbox list
                         def html = new StringBuilder("<b>Site</b><br><select name='value'>")
                         siteMap.each { value, label ->
