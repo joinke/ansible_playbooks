@@ -136,11 +136,11 @@ properties([
                         def compMap = [
                             'STP': 'STP',
                             'WB': 'WB',
-                            'STPWB': 'ALL'
+                            'ALL': 'BOTH'
                         ]
                         def op = OPERATION?.trim()
                         // Pre-select some options if needed
-                        def defaultValue = 'STPWB'
+                        def defaultValue = 'ALL'
                         if (op == 'example.py') {
                         // Build checkbox list
                         def html = new StringBuilder("<b>Component</b><br><select name='value'>")
@@ -182,7 +182,7 @@ properties([
                         def html = new StringBuilder("<b>Site</b><br><select name='value'>")
                         siteMap.each { value, label ->
                             def selected = (value == defaultValue) ? 'selected' : ''
-                            html.append("<option name='value' value='${value}' ${selected}>${label}</option>")
+                            html.append("<option value='${value}' ${selected}>${label}</option>")
                         }
                         html.append("</select>")
                         return html.toString()
@@ -246,7 +246,7 @@ properties([
                                 def compMap = envMap[s] ?: [:]
                         
                                 // If comp == STPWB, take both STP and WB
-                                def compsToUse = (comp == 'STPWB') ? ['STP','WB'] : [comp]
+                                def compsToUse = (comp == 'ALL') ? ['STP','WB'] : [comp]
                         
                                 compsToUse.collectMany { c ->
                                     compMap[c] ?: []
