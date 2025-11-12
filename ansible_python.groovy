@@ -276,6 +276,22 @@ pipeline {
   options {
     ansiColor('xterm')  // enable colored Ansible output
   }
+  parameters {
+        activeChoice(
+            name: 'MYTEST',
+            choiceType: 'FORMATTED_HTML', 
+            script: [
+                $class: 'GroovyScript',
+                script: [
+                    $class: 'SecureGroovyScript',
+                    sandbox: true,
+                    script: '''
+                        return "<b>Hello World</b>"
+                    '''
+                ]
+            ]
+        )
+  }
   environment {
     HOST_LIST = '192.168.70.175,192.168.70.193'
     OPERATION = "${params.OPERATION}"
