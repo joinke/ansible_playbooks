@@ -286,6 +286,13 @@ pipeline {
     INDIVIDUAL = "${params.INDIVIDUAL}"
   }
   stages {
+    stage('Verify Params') {
+      steps {
+          script {
+              echo "Selected env is $env.ENVS"
+          }
+      }
+    }
     stage('Run Ansible via Python') {
       steps {
         script {
