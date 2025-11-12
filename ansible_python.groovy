@@ -276,48 +276,6 @@ pipeline {
   options {
     ansiColor('xterm')  // enable colored Ansible output
   }
-parameters {
-        activeChoiceReactiveReference(
-            name: 'MYPARAM',
-            choiceType: 'FORMATTED_HTML', // The 'ET_' prefix is dropped
-            referencedParameters: 'OPER',
-            script: [
-                $class: 'GroovyScript',
-                script: [
-                    $class: 'SecureGroovyScript',
-                    sandbox: true,
-                    script: '''
-                        // Your script that checks OPERATION
-                        // and returns an HTML string
-                        
-                        def envMap = [
-                            'UAT01': 'UAT01',
-                            'UAT02': 'UAT02',
-                            'UAT03': 'UAT03'
-                        ]
-                        def op = OPER?.trim()
-                        
-                        if (op == 'example.py') {
-                            def html = new StringBuilder("<b>Environment</b><br>")
-                            envMap.each { value, label ->
-                                html.append("<label>")
-                                // This 'name="value"' is what makes it return a value
-                                html.append("<input type='checkbox' name='value' value='${value}' checked> ${label}")
-                                html.append("</label><br>")
-                            }
-                            return html.toString()
-                        } else {
-                            return '' // Return empty string if no match
-                        }
-                    '''
-                ]
-            ]
-        )
-        
-        // You would also need to define the 'OPERATION' parameter here
-        // (Assuming it's another parameter)
-        string(name: 'OPER', defaultValue: 'example.py', description: 'Operation to perform')
-    }
   environment {
     HOST_LIST = '192.168.70.175,192.168.70.193'
     OPERATION = "${params.OPERATION}"
