@@ -1,3 +1,6 @@
+import os
+import json
+
 class HostResolver:
     def __init__(self, json_path="jsonhosts"):
         self.host_map = self._load_host_map(json_path)
