@@ -1,28 +1,6 @@
 class HostResolver:
-    def __init__(self):
-        # Embed the hostMap directly in the class
-        self.host_map = {
-            "UAT01": {
-                "RCC": {
-                    "STP": ["192.168.70.175","192.168.70.193"],
-                    "WB":  ["192.168.70.175"]
-                },
-                "WSDC": {
-                    "STP": ["uat01_wsdc_stp01","uat01_wsdc_stp02"],
-                    "WB":  ["uat01_wsdc_wb01"]
-                }
-            },
-            "UAT02": {
-                "RCC": {
-                    "STP": ["uat02_rcc_stp01"],
-                    "WB":  ["uat02_rcc_wb01"]
-                },
-                "WSDC": {
-                    "STP": ["uat02_wsdc_stp01"],
-                    "WB":  ["uat02_wsdc_wb01","uat02_wsdc_wb02"]
-                }
-            }
-        }
+    def __init__(self, json_path="jsonhosts"):
+        self.host_map = self._load_host_map(json_path)
 
     def get_hosts(self, envs, site, comp):
         """
