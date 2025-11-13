@@ -51,19 +51,20 @@ class SSHRunner:
         else:
             print(f"\n✅ Command finished on {host}")
 
-        # If a fetch_dest is provided, SCP the file
-        if fetch_dest:
-            # Create host-specific path to avoid overwriting files
-            host_dest = os.path.join(fetch_dest, host)
-            os.makedirs(host_dest, exist_ok=True)
+        # If command_args included --fetch-dest, fetch that file
+        if "--fetch-dest" in command_args:
+            index = command_args.index("--fetch-dest") + 1
+            remote_file = command_args[index]  # this is the remote path
+            local_dir = "fetched"
+            os.makedirs(local_dir, exist_ok=True)
+            local_file = os.path.join(local_dir, f"{host}_{os.path.basename(remote_file)}")
+    
             scp_cmd = ["scp", "-o", "StrictHostKeyChecking=no"]
             if self.key_file:
                 scp_cmd.extend(["-i", self.key_file])
-            remote_file = f"{remote}:{fetch_dest}"
-            local_file = os.path.join(fetch_dest, f"{host}_{os.path.basename(fetch_dest)}")
-            scp_cmd.extend([remote_file, local_file])
-
-            print(f"\n📦 Fetching file from {host} to {local_file}\n")
+            scp_cmd.extend([f"{remote}:{remote_file}", local_file])
+    
+            print(f"\n📦 Fetching {remote_file} from {host} to {local_file}\n")
             scp_process = subprocess.Popen(
                 scp_cmd,
                 stdout=subprocess.PIPE,
@@ -72,7 +73,6 @@ class SSHRunner:
             )
             for line in iter(scp_process.stdout.readline, ""):
                 print(f"[{host} SCP] {line}", end="")
-
             scp_ret = scp_process.wait()
             if scp_ret != 0:
                 print(f"\n⚠️ SCP failed on {host} with exit code {scp_ret}")
