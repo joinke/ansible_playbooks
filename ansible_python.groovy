@@ -328,7 +328,7 @@ pipeline {
   post {
     always {
       echo '📦 Archiving fetched files...'
-      archiveArtifacts artifacts: 'fetched/**/*', fingerprint: true
+      archiveArtifacts artifacts: 'fetched/**/*', fingerprint: true , allowEmptyArchive: true
     }
   }
 }
