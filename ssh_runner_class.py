@@ -26,7 +26,7 @@ class SSHRunner:
         if not self.hosts:
             raise ValueError("No hosts provided")
 
-    def _run_on_host(self, host, command_args):
+    def _run_on_host(self, host, command_args, fetch_dest=None):
         ssh_cmd = ["ssh", "-o", "StrictHostKeyChecking=no"]
         if self.key_file:
             ssh_cmd.extend(["-i", self.key_file])
@@ -50,11 +50,40 @@ class SSHRunner:
             print(f"\n⚠️ Command failed on {host} with exit code {retcode}")
         else:
             print(f"\n✅ Command finished on {host}")
+
+        # If a fetch_dest is provided, SCP the file
+        if fetch_dest:
+            # Create host-specific path to avoid overwriting files
+            host_dest = os.path.join(fetch_dest, host)
+            os.makedirs(host_dest, exist_ok=True)
+            scp_cmd = ["scp", "-o", "StrictHostKeyChecking=no"]
+            if self.key_file:
+                scp_cmd.extend(["-i", self.key_file])
+            remote_file = f"{remote}:{fetch_dest}"
+            local_file = os.path.join(fetch_dest, f"{host}_{os.path.basename(fetch_dest)}")
+            scp_cmd.extend([remote_file, local_file])
+
+            print(f"\n📦 Fetching file from {host} to {local_file}\n")
+            scp_process = subprocess.Popen(
+                scp_cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True
+            )
+            for line in iter(scp_process.stdout.readline, ""):
+                print(f"[{host} SCP] {line}", end="")
+
+            scp_ret = scp_process.wait()
+            if scp_ret != 0:
+                print(f"\n⚠️ SCP failed on {host} with exit code {scp_ret}")
+            else:
+                print(f"\n✅ SCP finished on {host}")
+
         return retcode
 
-    def run_command(self, command_args):
+    def run_command(self, command_args, fetch_dest=None):
         with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
-            futures = {executor.submit(self._run_on_host, host, command_args): host for host in self.hosts}
+            futures = {executor.submit(self._run_on_host, host, command_args, fetch_dest): host for host in self.hosts}
             for future in as_completed(futures):
                 host = futures[future]
                 try:
