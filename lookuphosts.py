@@ -1,7 +1,14 @@
 class HostResolver:
     def __init__(self, json_path="jsonhosts"):
         self.host_map = self._load_host_map(json_path)
-
+   
+    def _load_host_map(self, json_path):
+        """Load the host map from a JSON file."""
+        if not os.path.exists(json_path):
+            raise FileNotFoundError(f"Host map file not found: {json_path}")
+        with open(json_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+            
     def get_hosts(self, envs, site, comp):
         """
         envs: list of environments (e.g. ["UAT01","UAT02"])
@@ -9,7 +16,6 @@ class HostResolver:
         comp: "STP", "WB", or "ALL/BOTH"
         Returns: CSV string of hostnames
         """
-    def get_hosts(self, envs, site, comp):
         # If envs is a string, split on commas
         if isinstance(envs, str):
             envs = [e.strip() for e in envs.split(",")]
