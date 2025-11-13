@@ -12,7 +12,7 @@
   "UAT02": {
     "RCC": {
       "STP": ["uat02_rcc_stp01"],
-      "WB": ["uat02_rcc_wb01"]
+      "WB": ["192.168.70.193"]
     },
     "WSDC": {
       "STP": ["uat02_wsdc_stp01"],
