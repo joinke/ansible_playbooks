@@ -47,9 +47,9 @@ class SSHRunner:
 
         retcode = process.wait()
         if retcode != 0:
-            print(f"\n⚠️ Command failed on {host} with exit code {retcode}")
+            print(f"\n{host}⚠️ Main Command failed with exit code {retcode}")
         else:
-            print(f"\n✅ Command finished on {host}")
+            print(f"\n{host}✅ Main Command finished")
 
         # If command_args included --fetch-dest, fetch that file
         if "--fetch-dest" in command_args:
@@ -75,9 +75,9 @@ class SSHRunner:
                 print(f"[{host} SCP] {line}", end="")
             scp_ret = scp_process.wait()
             if scp_ret != 0:
-                print(f"\n⚠️ SCP failed on {host} with exit code {scp_ret}")
+                print(f"\n{host}⚠️ SCP failed with exit code {scp_ret}")
             else:
-                print(f"\n✅ SCP finished on {host}")
+                print(f"\n{host}✅ SCP finished")
 
         return retcode
 
