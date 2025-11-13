@@ -277,7 +277,6 @@ pipeline {
     ansiColor('xterm')  // enable colored Ansible output
   }
   environment {
-    HOST_LIST = '192.168.70.175,192.168.70.193'
     OPERATION = "${params.OPERATION}"
     ENVS = "${params['\u200B'] ?: ''}"
     COMPS = "${params['\u200C'] ?: ''}"
