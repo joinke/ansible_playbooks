@@ -288,14 +288,14 @@ pipeline {
     stage('Verify Params') {
       steps {
           script {
-              echo "Selected env is $env.ENVS"
+              echo "Selected env is $env.ENVS and myhosts is $params.MYHOSTS"
               if (params.INDIVIDUAL && (params.MYHOSTS == null || params.MYHOSTS.trim().isEmpty())) {
                 error("No Hosts Selected. You must select hosts when 'INDIVIDUAL' is enabled.")
               }
          }
       }
     }
-    stage('Run Ansible via Python') {
+    stage('Run Python') {
       steps {
         script {
             def environments = getSelectedKeys(envMap, env.ENVS ?: '')
