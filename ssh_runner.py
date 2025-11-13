@@ -28,5 +28,5 @@ runner.run_command([
     "python3",
     f"/tmp/{SELECTEDOP}",
     "--fetch-dest",
-    f"{WORKSPACE}/fetched/"
+    f"/tmp/count_output.log"
 ])
