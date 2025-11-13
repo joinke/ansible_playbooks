@@ -289,7 +289,10 @@ pipeline {
       steps {
           script {
               echo "Selected env is $env.ENVS"
-          }
+              if (params.INDIVIDUAL && (params.MYHOSTS == null || params.MYHOSTS.trim().isEmpty())) {
+                error("No Hosts Selected. You must select hosts when 'INDIVIDUAL' is enabled.")
+              }
+         }
       }
     }
     stage('Run Ansible via Python') {
