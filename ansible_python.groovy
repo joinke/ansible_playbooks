@@ -288,8 +288,8 @@ pipeline {
     stage('Verify Params') {
       steps {
           script {
-              echo "Selected env is $env.ENVS and myhosts is $params.MYHOSTS"
-              if (params.INDIVIDUAL && (params.MYHOSTS == null || params.MYHOSTS.trim().isEmpty())) {
+              echo "Selected env is $env.ENVS and myhosts is $env.MYHOSTS"
+              if (params.INDIVIDUAL && (env.MYHOSTS == null || env.MYHOSTS.trim().isEmpty())) {
                 error("No Hosts Selected. You must select hosts when 'INDIVIDUAL' is enabled.")
               }
          }
