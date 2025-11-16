@@ -87,22 +87,22 @@ properties([
           $class: 'DynamicReferenceParameter',
           name: '\u200B',
           referencedParameters: 'OPERATION',
-          choiceType: 'ET_MULTI_SELECT',
+          choiceType: 'ET_CHECKBOX',   // <-- WORKS WITH MAPS
           script: [
             $class: 'GroovyScript',
             script: [
               $class: 'SecureGroovyScript',
               sandbox: true,
               script: '''
-                    if (OPERATION?.trim() != "example.py") {
-                        return []
-                    }
+                if (OPERATION?.trim() != "example.py") {
+                    return []
+                }
         
-                    return [
-                        [name: "Env UAT01", value: "UAT01"],
-                        [name: "Env UAT02", value: "UAT02"],
-                        [name: "Env UAT03", value: "UAT03"]
-                    ]
+                return [
+                    [name: "Env UAT01", value: "UAT01"],
+                    [name: "Env UAT02", value: "UAT02", selected: true],
+                    [name: "Env UAT03", value: "UAT03"]
+                ]
               '''
             ]
           ]
