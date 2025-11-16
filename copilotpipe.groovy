@@ -14,6 +14,7 @@ properties([
         ],
         [$class: 'DynamicReferenceParameter',
             name: 'OPERATION2',
+            choiceType: 'ET_FORMATTED_HTML',
             description: 'Select the operation',
             script: [$class: 'GroovyScript',
                 script: [script: '''
