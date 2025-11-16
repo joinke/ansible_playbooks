@@ -41,7 +41,7 @@ properties([
         ],
         [
             $class: 'DynamicReferenceParameter',
-            name: 'ENVS',
+            name: '\u200B',
             choiceType: 'ET_FORMATTED_HTML',
             omitValueField: true,
             referencedParameters: 'OPERATION',
