@@ -51,7 +51,7 @@ properties([
                 script: [
                     $class: 'SecureGroovyScript',
                     sandbox: true,
-                    script: """
+                    script: '''
                         def envMap = [
                             'UAT01': 'UAT01',
                             'UAT02': 'UAT02',
@@ -63,11 +63,11 @@ properties([
                         if (op == 'amhstart') {
                         // Build checkbox list
                         
-                        def html = new StringBuilder("<b>Environment</b><br>${test}")
+                        def html = new StringBuilder("<b>Environment</b><br>")
                         envMap.each { value, label ->
                             def checked = (value in defaultSelected) ? 'checked' : ''
                             html.append("<label>")
-                            html.append("<input type='checkbox' name='value' value=${value} ${checked}> ${label}")
+                            html.append("<input type='checkbox' name='value' value='${value}' ${checked}> ${label}")
                             html.append("</label><br>")
                         }
 
@@ -75,7 +75,7 @@ properties([
                         } else {
                           return ''
                         }
-                    """
+                    '''
                 ]
             ]
         ],
