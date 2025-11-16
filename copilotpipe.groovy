@@ -45,21 +45,17 @@ pipeline {
         }
 
         // Environment checkboxes
-        activeChoiceParam('ENVS') {
-            choiceType('CHECKBOX')
-            referencedParameter('OPERATION')
-            groovyScript {
-                script('''
-                    if (OPERATION?.trim() != 'example.py') return []
-                    return [
-                        [name:"Environment A", value:"UAT01"],
-                        [name:"Environment B", value:"UAT02"],
-                        [name:"Environment C", value:"UAT03"]
-                    ]
-                ''')
-                fallbackScript('return []')
+            activeChoiceParam('ENVS') {
+                choiceType('CHECKBOX')
+                referencedParameter('OPERATION')
+                groovyScript {
+                    script('''
+                        if (OPERATION?.trim() != 'example.py') return []
+                        return ["UAT01", "UAT02", "UAT03"]
+                    ''')
+                    fallbackScript('return []')
+                }
             }
-        }
 
         // Component dropdown
         activeChoiceParam('COMP') {
