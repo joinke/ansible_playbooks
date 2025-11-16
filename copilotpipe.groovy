@@ -47,8 +47,9 @@ properties([
             referencedParameters: 'OPERATION',
             script: [$class: 'GroovyScript',
                 script: [script: '''
-                    if (OPERATION == "amhstart")
-                        return '["UAT01","UAT02"]'
+                    if (OPERATION == "amhstart") {
+                        envlist = $environments.split(',')
+                        return ["UAT01","UAT02"]
                     } else {
                         return []
                     }
