@@ -12,6 +12,23 @@ properties([
                 fallbackScript: [script: 'return ["Start AMH (example.py)"]', sandbox: true]
             ]
         ],
+        [$class: 'DynamicReferenceParameter',
+            name: 'OPERATION2',
+            description: 'Select the operation',
+            script: [$class: 'GroovyScript',
+                script: [script: '''
+                    return """
+                        <b>Choose an operation:</b><br>
+                        <select name='value'>
+                          <option value='Start AMH (example.py)'>Start AMH (example.py)</option>
+                          <option value='Stop AMH (example1.py)'>Stop AMH (example1.py)</option>
+                          <option value='Restart AMH (example3.py)'>Restart AMH (example3.py)</option>
+                        </select>
+                    """
+                ''', sandbox: true],
+                fallbackScript: [script: 'return "<i>No operations available</i>"', sandbox: true]
+            ]
+        ],
 
         // Dynamic HTML block for instructions
         [$class: 'DynamicReferenceParameter',
@@ -68,7 +85,7 @@ properties([
                         def op = OPERATION?.trim()
                         // Pre-select some options if needed
                         def defaultValue = 'ALL'
-                        if (op == 'example.py') {
+                        if (op == 'Start AMH (example.py)') {
                         // Build checkbox list
                         def html = new StringBuilder("<b>Component</b><br><select name='value'>")
                         compMap.each { value, label ->
@@ -94,8 +111,9 @@ pipeline {
       steps {
         script {
           echo "OPERATION: ${params['OPERATION']}"
+          echo "OPERATION2: ${params['OPERATION2']}"
           echo "ENV: ${params['\u200B']}"
-          echo "ENV: ${params['\u200C']}"
+          echo "COMP: ${params['\u200C']}"
         }
       }
     }
