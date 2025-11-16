@@ -1,4 +1,5 @@
 def environments = '["UAT01","UAT02","UAT03"]'
+def test = 'ikke'
 properties([
     parameters([
         // Dropdown for OPERATION
@@ -30,7 +31,7 @@ properties([
             script: [$class: 'GroovyScript',
                 script: [script: """
                     if (OPERATION == "amhstart") {
-                        return "<b>Please select environments below:</b>\${environments}"
+                        return "<b>Please select environments below:</b>${environments}"
                     } else {
                         return ""
                     }
