@@ -1,9 +1,8 @@
-// Define Active Choices parameters
 properties([
     parameters([
         // Dropdown for OPERATION
         [$class: 'CascadeChoiceParameter',
-            choiceType: 'PT_SINGLE_SELECT',   // ✅ dropdown
+            choiceType: 'PT_SINGLE_SELECT',
             description: 'Select the operation',
             name: 'OPERATION',
             script: [$class: 'GroovyScript',
@@ -14,14 +13,21 @@ properties([
             ]
         ],
 
-        // Checkbox list for ENV
+        // Checkbox list for ENV, reactive to OPERATION
         [$class: 'CascadeChoiceParameter',
-            choiceType: 'PT_CHECKBOX',        // ✅ checkbox list
-            description: 'Select environments',
+            choiceType: 'PT_CHECKBOX',
+            description: 'Select environments (only for Start AMH)',
             name: 'ENV',
+            referencedParameters: 'OPERATION',   // ✅ makes it conditional
             script: [$class: 'GroovyScript',
-                script: [script: 'return ["UAT01","UAT02","UAT03"]', sandbox: true],
-                fallbackScript: [script: 'return ["UAT01"]', sandbox: true]
+                script: [script: '''
+                    if (OPERATION == "Start AMH (example.py)") {
+                        return ["UAT01","UAT02","UAT03"]
+                    } else {
+                        return []
+                    }
+                ''', sandbox: true],
+                fallbackScript: [script: 'return []', sandbox: true]
             ]
         ]
     ])
