@@ -62,8 +62,8 @@ properties([
                         
                         if (op == 'amhstart') {
                         // Build checkbox list
-                        def myikke = "${test}"
-                        def html = new StringBuilder("<b>Environment</b><br>${myikke}")
+                        
+                        def html = new StringBuilder("<b>Environment</b><br>${test}")
                         myikke.each { value, label ->
                             def checked = (value in defaultSelected) ? 'checked' : ''
                             html.append("<label>")
