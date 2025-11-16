@@ -28,13 +28,13 @@ properties([
             choiceType: 'ET_FORMATTED_HTML',
             referencedParameters: 'OPERATION',
             script: [$class: 'GroovyScript',
-                script: [script: '''
+                script: [script: """
                     if (OPERATION == "amhstart") {
                         return "<b>Please select environments below:</b>${environments}"
                     } else {
                         return ""
                     }
-                ''', sandbox: true],
+                """, sandbox: true],
                 fallbackScript: [script: 'return "<i>No environments available</i>"', sandbox: true]
             ]
         ],
