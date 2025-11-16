@@ -31,7 +31,7 @@ properties([
             script: [$class: 'GroovyScript',
                 script: [script: """
                     if (OPERATION == "amhstart") {
-                        return "<b>Please select environments below:</b>${environments}"
+                        return "<b>Please select environments below:</b>${test}"
                     } else {
                         return ""
                     }
