@@ -40,20 +40,13 @@ pipeline {
   }
   environment {
     OPERATION = "${params.OPERATION}"
-    ENVS = "${params['\u200B'] ?: ''}"
-    COMPS = "${params['\u200C'] ?: ''}"
-    SITE = "${params['\u200D'] ?: ''}"
-    MYHOSTS = "${params['\u2060'] ?: ''}"
-    INDIVIDUAL = "${params.INDIVIDUAL}"
+    ENVS = "${params['ENV'] ?: ''}"
   }
   stages {
     stage('Verify Params') {
       steps {
           script {
-              echo "Selected env is $env.ENVS and myhosts is $env.MYHOSTS"
-              if (params.INDIVIDUAL?.toBoolean() && (env.MYHOSTS == null || env.MYHOSTS.trim().isEmpty())) {
-                error("No Hosts Selected. You must select hosts when 'INDIVIDUAL' is enabled.")
-              }
+              echo "Selected env is $env.ENVS and myhosts is $env.OPERATION"
          }
       }
     }
