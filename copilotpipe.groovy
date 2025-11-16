@@ -39,26 +39,44 @@ properties([
                 fallbackScript: [script: 'return "<i>No environments available</i>"', sandbox: true]
             ]
         ],
-        [$class: 'DynamicReferenceParameter',
-            name: 'ENV',
-            description: 'Select environments',
+        [
+            $class: 'DynamicReferenceParameter',
+            name: 'ENVS',
+            choiceType: 'ET_FORMATTED_HTML',
+            omitValueField: true,
             referencedParameters: 'OPERATION',
-            script: [$class: 'GroovyScript',
-                script: [script: """
-                    if (OPERATION == "amhstart") {
-                        return '''
-                            <b>Please select environments:</b><br>
-                            <input type='checkbox' name='value' value='UAT01'> Environment A (UAT01)<br>
-                            <input type='checkbox' name='value' value='UAT02'> Environment B (UAT02)<br>
-                            <input type='checkbox' name='value' value='UAT03'> Environment C (UAT03)<br>
-                        '''
-                    } else {
-                        return "<i>No environments required for this operation</i>"
-                    }
-                """, sandbox: true],
-                fallbackScript: [script: 'return "<i>No environments available</i>"', sandbox: true]
+            script: [
+                $class: 'GroovyScript',
+                script: [
+                    $class: 'SecureGroovyScript',
+                    sandbox: true,
+                    script: '''
+                        def envMap = [
+                            'UAT01': 'UAT01',
+                            'UAT02': 'UAT02',
+                            'UAT03': 'UAT03'
+                        ]
+                        def op = OPERATION?.trim()
+                        def defaultSelected = ['UAT02']
+                        
+                        if (op == 'amhstart') {
+                        // Build checkbox list
+                        def html = new StringBuilder("<b>Environment</b><br>")
+                        envMap.each { value, label ->
+                            def checked = (value in defaultSelected) ? 'checked' : ''
+                            html.append("<label>")
+                            html.append("<input type='checkbox' name='value' value='${value}' ${checked}> ${label}")
+                            html.append("</label><br>")
+                        }
+
+                        return html.toString()
+                        } else {
+                          return ''
+                        }
+                    '''
+                ]
             ]
-           ],
+        ],
             [$class: 'DynamicReferenceParameter',
             name: '\u200C',
             choiceType: 'ET_FORMATTED_HTML',
