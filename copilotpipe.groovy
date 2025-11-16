@@ -1,3 +1,4 @@
+def environments = '["UAT01","UAT02"]'
 properties([
     parameters([
         // Dropdown for OPERATION
@@ -47,12 +48,12 @@ properties([
             script: [$class: 'GroovyScript',
                 script: [script: '''
                     if (OPERATION == "amhstart") {
-                        return ["UAT01","UAT02","UAT03"]
+                        return environments
                     } else {
                         return []
                     }
                 ''', sandbox: true],
-                fallbackScript: [script: 'return []', sandbox: true]
+                fallbackScript: [script: 'return ["ERROR"]', sandbox: true]
             ]
         ],
                 [
