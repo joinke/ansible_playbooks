@@ -40,23 +40,29 @@ properties([
             ]
         ],
 
-        // Checkbox list for ENV
-        [$class: 'CascadeChoiceParameter',
-            choiceType: 'PT_CHECKBOX',
-            description: '',
-            name: '\u200B',
+],
+
+        // Custom HTML checkboxes for ENV
+        [$class: 'DynamicReferenceParameter',
+            name: 'ENV',
+            description: 'Select environments',
             referencedParameters: 'OPERATION',
             script: [$class: 'GroovyScript',
                 script: [script: """
                     if (OPERATION == "amhstart") {
-                        return ${environments}
+                        return '''
+                            <b>Please select environments:</b><br>
+                            <input type='checkbox' name='value' value='UAT01'> Environment A (UAT01)<br>
+                            <input type='checkbox' name='value' value='UAT02'> Environment B (UAT02)<br>
+                            <input type='checkbox' name='value' value='UAT03'> Environment C (UAT03)<br>
+                        '''
                     } else {
-                        return []
+                        return "<i>No environments required for this operation</i>"
                     }
                 """, sandbox: true],
-                fallbackScript: [script: 'return ["ERROR"]', sandbox: true]
-            ]
-        ],
+                fallbackScript: [script: 'return "<i>No environments available</i>"', sandbox: true]
+            ],
+        
                 [
             $class: 'DynamicReferenceParameter',
             name: '\u200C',
