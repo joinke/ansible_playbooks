@@ -1,4 +1,4 @@
-def environments = '["UAT01","UAT02"]'
+def environments = '"UAT01","UAT02"'
 properties([
     parameters([
         // Dropdown for OPERATION
@@ -48,7 +48,7 @@ properties([
             script: [$class: 'GroovyScript',
                 script: [script: '''
                     if (OPERATION == "amhstart") {
-                        return "${environments}"
+                        return ["${environments}"]
                     } else {
                         return []
                     }
