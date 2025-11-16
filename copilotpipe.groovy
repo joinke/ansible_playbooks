@@ -1,19 +1,8 @@
 properties([
     parameters([
         // Dropdown for OPERATION
-        [$class: 'CascadeChoiceParameter',
-            choiceType: 'PT_SINGLE_SELECT',
-            description: 'Select the operation',
-            name: 'OPERATION',
-            script: [$class: 'GroovyScript',
-                script: [script: '''
-                    return ["Start AMH (example.py)", "Stop AMH (example1.py)", "Restart AMH (example3.py)"]
-                ''', sandbox: true],
-                fallbackScript: [script: 'return ["Start AMH (example.py)"]', sandbox: true]
-            ]
-        ],
         [$class: 'DynamicReferenceParameter',
-            name: 'OPERATION2',
+            name: 'OPERATION',
             choiceType: 'ET_FORMATTED_HTML',
             description: 'Select the operation',
             script: [$class: 'GroovyScript',
@@ -21,9 +10,9 @@ properties([
                     return """
                         <b>Choose an operation:</b><br>
                         <select name='value'>
-                          <option value='Start AMH (example.py)'>Start AMH (example.py)</option>
-                          <option value='Stop AMH (example1.py)'>Stop AMH (example1.py)</option>
-                          <option value='Restart AMH (example3.py)'>Restart AMH (example3.py)</option>
+                          <option value='amhstart'>Start AMH</option>
+                          <option value='amhstop'>Stop AMH</option>
+                          <option value='amhrestart'>Restart AMH</option>
                         </select>
                     """
                 ''', sandbox: true],
@@ -39,7 +28,7 @@ properties([
             referencedParameters: 'OPERATION',
             script: [$class: 'GroovyScript',
                 script: [script: '''
-                    if (OPERATION == "Start AMH (example.py)") {
+                    if (OPERATION == "amhstart") {
                         return "<b>Please select environments below:</b>"
                     } else {
                         return ""
@@ -57,7 +46,7 @@ properties([
             referencedParameters: 'OPERATION',
             script: [$class: 'GroovyScript',
                 script: [script: '''
-                    if (OPERATION == "Start AMH (example.py)") {
+                    if (OPERATION == "amhstart") {
                         return ["UAT01","UAT02","UAT03"]
                     } else {
                         return []
@@ -86,7 +75,7 @@ properties([
                         def op = OPERATION?.trim()
                         // Pre-select some options if needed
                         def defaultValue = 'ALL'
-                        if (op == 'Start AMH (example.py)') {
+                        if (op == 'amhstart') {
                         // Build checkbox list
                         def html = new StringBuilder("<b>Component</b><br><select name='value'>")
                         compMap.each { value, label ->
