@@ -84,42 +84,42 @@ properties([
             ]
         ],
         [
-            $class: 'DynamicReferenceParameter',
-            name: '\u200B',
-            choiceType: 'ET_FORMATTED_HTML',
-            omitValueField: true,
-            referencedParameters: 'OPERATION',
+          $class: 'CascadeChoiceParameter',
+          choiceType: 'PT_MULTI_SELECT',
+          filterLength: 1,
+          name: '\u200B',
+          referencedParameters: 'OPERATION',
+          script: [
+            $class: 'GroovyScript',
             script: [
-                $class: 'GroovyScript',
-                script: [
-                    $class: 'SecureGroovyScript',
-                    sandbox: true,
-                    script: '''
-                        def envMap = [
-                            'UAT01': 'UAT01',
-                            'UAT02': 'UAT02',
-                            'UAT03': 'UAT03'
-                        ]
-                        def op = OPERATION?.trim()
-                        def defaultSelected = ['UAT02']
-                        
-                        if (op == 'example.py') {
-                        // Build checkbox list
-                        def html = new StringBuilder("<b>Environment</b><br>")
-                        envMap.each { value, label ->
-                            def checked = (value in defaultSelected) ? 'checked' : ''
-                            html.append("<label>")
-                            html.append("<input type='checkbox' name='value' value='${value}' ${checked}> ${label}")
-                            html.append("</label><br>")
-                        }
-
-                        return html.toString()
-                        } else {
-                          return ''
-                        }
-                    '''
-                ]
+              $class: 'SecureGroovyScript',
+              sandbox: true,
+              script: '''
+                  def envMap = [
+                      'UAT01': 'Env UAT01',
+                      'UAT02': 'Env UAT02',
+                      'UAT03': 'Env UAT03'
+                  ]
+        
+                  // Only show options if OPERATION matches
+                  if (OPERATION?.trim() != "example.py") {
+                      return []
+                  }
+        
+                  // Default selected
+                  def defaultSelected = ['UAT02']
+        
+                  // Return list of maps: [value: "...", label: "..."]
+                  return envMap.collect { value, label ->
+                      [
+                        name: label,    // label shown in UI
+                        value: value,   // actual return value
+                        selected: defaultSelected.contains(value)
+                      ]
+                  }
+              '''
             ]
+          ]
         ],
         [
             $class: 'DynamicReferenceParameter',
