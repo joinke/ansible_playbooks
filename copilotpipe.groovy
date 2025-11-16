@@ -13,21 +13,21 @@ properties([
             ]
         ],
 
-        // Extra explanatory text block
-        [$class: 'CascadeChoiceParameter',
-            choiceType: 'PT_FORMATTED_HTML',   // ✅ formatted HTML
-            name: 'ENV_HELP',
-            description: 'Instructions',
+        // Dynamic HTML block for instructions
+        [$class: 'DynamicReferenceParameter',
+            name: 'xxxx',
+            description: '',
+            choiceType: 'ET_FORMATTED_HTML',
             referencedParameters: 'OPERATION',
             script: [$class: 'GroovyScript',
                 script: [script: '''
                     if (OPERATION == "Start AMH (example.py)") {
-                        return ["<b>Please select environments below:</b><br>(Only applies when starting AMH)"]
+                        return "<b>Please select environments below:</b><br>(Only applies when starting AMH)"
                     } else {
-                        return ["<i>No environments required for this operation</i>"]
+                        return ""
                     }
                 ''', sandbox: true],
-                fallbackScript: [script: 'return ["<i>No environments available</i>"]', sandbox: true]
+                fallbackScript: [script: 'return "<i>No environments available</i>"', sandbox: true]
             ]
         ],
 
