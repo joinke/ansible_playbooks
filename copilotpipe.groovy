@@ -47,6 +47,42 @@ properties([
                 ''', sandbox: true],
                 fallbackScript: [script: 'return []', sandbox: true]
             ]
+        ],
+                [
+            $class: 'DynamicReferenceParameter',
+            name: '\u200C',
+            choiceType: 'ET_FORMATTED_HTML',
+            omitValueField: true,
+            referencedParameters: 'OPERATION',
+            script: [
+                $class: 'GroovyScript',
+                script: [
+                    $class: 'SecureGroovyScript',
+                    sandbox: true,
+                    script: '''
+                        def compMap = [
+                            'STP': 'STP',
+                            'WB': 'WB',
+                            'ALL': 'BOTH'
+                        ]
+                        def op = OPERATION?.trim()
+                        // Pre-select some options if needed
+                        def defaultValue = 'ALL'
+                        if (op == 'example.py') {
+                        // Build checkbox list
+                        def html = new StringBuilder("<b>Component</b><br><select name='value'>")
+                        compMap.each { value, label ->
+                            def selected = (value == defaultValue) ? 'selected' : ''
+                            html.append("<option value='${value}' ${selected}>${label}</option>")
+                        }
+                        html.append("</select>")
+                        return html.toString()
+                        } else {
+                          return ''
+                        }
+                    '''
+                ]
+            ]
         ]
     ])
 ])
@@ -59,6 +95,7 @@ pipeline {
         script {
           echo "OPERATION: ${params['OPERATION']}"
           echo "ENV: ${params['\u200B']}"
+          echo "ENV: ${params['\u200C']}"
         }
       }
     }
