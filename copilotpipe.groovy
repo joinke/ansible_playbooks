@@ -43,7 +43,7 @@ properties([
             $class: 'DynamicReferenceParameter',
             name: '\u200B',
             choiceType: 'ET_FORMATTED_HTML',
-            omitValueField: true,
+            omitValueField: false,
             referencedParameters: 'OPERATION',
             script: [
                 $class: 'GroovyScript',
