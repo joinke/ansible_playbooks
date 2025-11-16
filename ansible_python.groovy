@@ -83,30 +83,31 @@ properties([
                 ]
             ]
         ],
-        [
-          $class: 'DynamicReferenceParameter',
-          name: 'ENVS',
-          referencedParameters: 'OPERATION',
-          choiceType: 'ET_CHECKBOX',   // <-- WORKS WITH MAPS
-          script: [
-            $class: 'GroovyScript',
-            script: [
-              $class: 'SecureGroovyScript',
-              sandbox: true,
-              script: '''
-                if (OPERATION?.trim() != "example.py") {
-                    return []
-                }
-        
-                return [
-                    [name: "Env UAT01", value: "UAT01"],
-                    [name: "Env UAT02", value: "UAT02", selected: true],
-                    [name: "Env UAT03", value: "UAT03"]
-                ]
-              '''
-            ]
+[
+  $class: 'DynamicReferenceParameter',
+  name: 'ENVS',
+  referencedParameters: '',
+  choiceType: 'ET_CHECKBOX',
+  script: [
+    $class: 'GroovyScript',
+    script: [
+      $class: 'SecureGroovyScript',
+      sandbox: true,
+      script: '''
+          return [
+              [name: "Environment A", value: "UAT01"],
+              [name: "Environment B", value: "UAT02"],
+              [name: "Environment C", value: "UAT03"]
           ]
-        ],
+      '''
+    ],
+    fallbackScript: [
+      $class: 'SecureGroovyScript',
+      script: 'return []',
+      sandbox: true
+    ]
+  ]
+],
         [
             $class: 'DynamicReferenceParameter',
             name: '\u200C',
