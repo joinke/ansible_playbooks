@@ -49,7 +49,7 @@ properties([
                 script: [script: """
                     if (OPERATION == "amhstart") {
                         envlist = ${environments}.split(',') as List
-                        return $envlist
+                        return ["$envlist"]
                     } else {
                         return []
                     }
