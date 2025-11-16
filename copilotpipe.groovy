@@ -15,14 +15,14 @@ properties([
 
         // Dynamic HTML block for instructions
         [$class: 'DynamicReferenceParameter',
-            name: 'xxxx',
+            name: '',
             description: '',
             choiceType: 'ET_FORMATTED_HTML',
             referencedParameters: 'OPERATION',
             script: [$class: 'GroovyScript',
                 script: [script: '''
                     if (OPERATION == "Start AMH (example.py)") {
-                        return "<b>Please select environments below:</b><br>(Only applies when starting AMH)"
+                        return "<b>Please select environments below:</b>"
                     } else {
                         return ""
                     }
@@ -34,8 +34,8 @@ properties([
         // Checkbox list for ENV
         [$class: 'CascadeChoiceParameter',
             choiceType: 'PT_CHECKBOX',
-            description: 'Select environments',
-            name: 'ENV',
+            description: '',
+            name: '\u200B',
             referencedParameters: 'OPERATION',
             script: [$class: 'GroovyScript',
                 script: [script: '''
@@ -57,8 +57,8 @@ pipeline {
     stage('Print Params') {
       steps {
         script {
-          echo "OPERATION: ${params.OPERATION}"
-          echo "ENV: ${params.ENV}"
+          echo "OPERATION: ${params['OPERATION']}"
+          echo "ENV: ${params['\u200B]}"
         }
       }
     }
