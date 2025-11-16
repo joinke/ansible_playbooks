@@ -39,10 +39,6 @@ properties([
                 fallbackScript: [script: 'return "<i>No environments available</i>"', sandbox: true]
             ]
         ],
-
-],
-
-        // Custom HTML checkboxes for ENV
         [$class: 'DynamicReferenceParameter',
             name: 'ENV',
             description: 'Select environments',
@@ -62,9 +58,7 @@ properties([
                 """, sandbox: true],
                 fallbackScript: [script: 'return "<i>No environments available</i>"', sandbox: true]
             ],
-        
-                [
-            $class: 'DynamicReferenceParameter',
+            [$class: 'DynamicReferenceParameter',
             name: '\u200C',
             choiceType: 'ET_FORMATTED_HTML',
             omitValueField: true,
