@@ -57,7 +57,8 @@ properties([
                     }
                 """, sandbox: true],
                 fallbackScript: [script: 'return "<i>No environments available</i>"', sandbox: true]
-            ],
+            ]
+           ],
             [$class: 'DynamicReferenceParameter',
             name: '\u200C',
             choiceType: 'ET_FORMATTED_HTML',
