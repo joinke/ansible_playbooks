@@ -1,4 +1,4 @@
-def environments = "'UAT01','UAT02','UAT03'"
+def environments = '"UAT01","UAT02","UAT03"'
 properties([
     parameters([
         // Dropdown for OPERATION
