@@ -1,3 +1,4 @@
+// Active Choices parameters
 properties([
     parameters([
         // Dropdown for OPERATION
@@ -13,41 +14,47 @@ properties([
             ]
         ],
 
-        // Checkbox list for ENV, reactive to OPERATION
-        [$class: 'CascadeChoiceParameter',
-            choiceType: 'PT_CHECKBOX',
-            description: '',
-            name: '\u200B',
-            referencedParameters: 'OPERATION',   // ✅ makes it conditional
+        // Reactive HTML checkbox list for ENV
+        [$class: 'DynamicReferenceParameter',
+            name: 'ENV',
+            description: 'Select environments (only shown for Start AMH)',
+            referencedParameters: 'OPERATION',
             script: [$class: 'GroovyScript',
                 script: [script: '''
                     if (OPERATION == "Start AMH (example.py)") {
-                        return ["UAT01","UAT02","UAT03"]
+                        return """
+                            <b>Please select environments:</b><br>
+                            <input type='checkbox' name='value' value='UAT01'> UAT01<br>
+                            <input type='checkbox' name='value' value='UAT02'> UAT02<br>
+                            <input type='checkbox' name='value' value='UAT03'> UAT03<br>
+                        """
                     } else {
-                        return []
+                        return "<i>No environments required for this operation</i>"
                     }
-                ''', sandbox: true],
-                fallbackScript: [script: 'return []', sandbox: true]
+                """, sandbox: true],
+                fallbackScript: [script: 'return "<i>No environments available</i>"', sandbox: true]
             ]
         ]
     ])
 ])
 
+// Declarative pipeline body
 pipeline {
   agent any
   options {
-    ansiColor('xterm')  // enable colored Ansible output
+    ansiColor('xterm')
   }
   environment {
     OPERATION = "${params.OPERATION}"
-    ENVS = "${params['\u200B'] ?: ''}"
+    ENVS      = "${params['ENV'] ?: ''}"
   }
   stages {
-    stage('Verify Params') {
+    stage('Print Params') {
       steps {
-          script {
-              echo "Selected env is $env.ENVS and myhosts is $env.OPERATION"
-         }
+        script {
+          echo "Selected OPERATION: ${env.OPERATION}"
+          echo "Selected ENV: ${env.ENVS}"
+        }
       }
     }
   }
