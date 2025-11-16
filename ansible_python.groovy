@@ -86,7 +86,6 @@ properties([
 [
   $class: 'DynamicReferenceParameter',
   name: 'ENVS',
-  referencedParameters: '',
   choiceType: 'ET_CHECKBOX',
   script: [
     $class: 'GroovyScript',
