@@ -1,5 +1,6 @@
 def environments = '["UAT01","UAT02","UAT03"]'
 def test = 'ikke'
+def test2 = '["UAT01": "UAT01","UAT02": "UAT02","UAT03": "UAT03"]'
 properties([
     parameters([
         // Dropdown for OPERATION
@@ -61,8 +62,9 @@ properties([
                         
                         if (op == 'amhstart') {
                         // Build checkbox list
+                        def myikke = "$test2"
                         def html = new StringBuilder("<b>Environment</b><br>")
-                        envMap.each { value, label ->
+                        myikke.each { value, label ->
                             def checked = (value in defaultSelected) ? 'checked' : ''
                             html.append("<label>")
                             html.append("<input type='checkbox' name='value' value='${value}' ${checked}> ${label}")
