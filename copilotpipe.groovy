@@ -1,103 +1,170 @@
-def envMap = [
-    'UAT01': 'Environment A',
-    'UAT02': 'Environment B',
-    'UAT03': 'Environment C'
-]
+// ===== Parameters Definition =====
+properties([
+    parameters([
+        // Operation selection
+        [
+            $class: 'DynamicReferenceParameter',
+            name: 'OPERATION',
+            choiceType: 'ET_FORMATTED_HTML',
+            omitValueField: true,
+            script: [
+                $class: 'GroovyScript',
+                script: [
+                    $class: 'SecureGroovyScript',
+                    sandbox: true,
+                    script: '''
+                        def commandMap = [
+                            'example1.py': 'Stop AMH',
+                            'example.py': 'Start AMH',
+                            'example3.py': 'Restart AMH',
+                        ]
+                        def defaultValue = commandMap.keySet().iterator().next()
+                        def html = new StringBuilder("<select name='value'>")
+                        commandMap.each { value, label ->
+                            def selected = (value == defaultValue) ? 'selected' : ''
+                            html.append("<option value='${value}' ${selected}>${label}</option>")
+                        }
+                        html.append("</select>")
+                        return html.toString()
+                    '''
+                ]
+            ]
+        ],
 
-def getSelectedKeys(mymap, boolString) {
-    def bools = boolString.split(',').collect { it.trim().toBoolean() }
-    def keys = mymap.keySet().toList()
-    def selected = []
-    for (int i = 0; i < Math.min(keys.size(), bools.size()); i++) {
-        if (bools[i]) selected << keys[i]
-    }
-    return selected.join(',')
-}
+        // Individual Hosts checkbox
+        [
+            $class: 'DynamicReferenceParameter',
+            name: 'INDIVIDUAL',
+            choiceType: 'ET_FORMATTED_HTML',
+            omitValueField: true,
+            referencedParameters: 'OPERATION',
+            script: [
+                $class: 'GroovyScript',
+                script: [
+                    $class: 'SecureGroovyScript',
+                    sandbox: true,
+                    script: '''
+                        def op = OPERATION?.trim()
+                        def individualMap = ['true': 'Individual Hosts']
+                        def defaultSelected = ['false']
+                        def html = new StringBuilder()
+                        individualMap.each { value, label ->
+                            def checked = (value in defaultSelected) ? 'checked' : ''
+                            html.append("<label><input type='checkbox' name='value' value='${value}' ${checked}> ${label}</label><br>")
+                        }
+                        return html.toString()
+                    '''
+                ]
+            ]
+        ],
 
+        // Environments ET_CHECKBOX
+        [
+            $class: 'DynamicReferenceParameter',
+            name: 'ENVS',
+            choiceType: 'ET_CHECKBOX',
+            referencedParameters: 'OPERATION',
+            script: [
+                $class: 'GroovyScript',
+                script: [
+                    $class: 'SecureGroovyScript',
+                    sandbox: true,
+                    script: '''
+                        if (OPERATION?.trim() != "example.py") return []
+                        return [
+                            [name: "Environment A", value: "UAT01"],
+                            [name: "Environment B", value: "UAT02", selected: true],
+                            [name: "Environment C", value: "UAT03"]
+                        ]
+                    '''
+                ],
+                fallbackScript: [
+                    $class: 'SecureGroovyScript',
+                    script: 'return []',
+                    sandbox: true
+                ]
+            ]
+        ],
+
+        // Component dropdown
+        [
+            $class: 'DynamicReferenceParameter',
+            name: 'COMPONENT',
+            choiceType: 'ET_FORMATTED_HTML',
+            referencedParameters: 'OPERATION',
+            script: [
+                $class: 'GroovyScript',
+                script: [
+                    $class: 'SecureGroovyScript',
+                    sandbox: true,
+                    script: '''
+                        def compMap = ['STP':'STP', 'WB':'WB', 'ALL':'BOTH']
+                        def defaultValue = 'ALL'
+                        if (OPERATION?.trim() != "example.py") return ""
+                        def html = new StringBuilder("<select name='value'>")
+                        compMap.each { value, label ->
+                            def selected = (value == defaultValue) ? 'selected' : ''
+                            html.append("<option value='${value}' ${selected}>${label}</option>")
+                        }
+                        html.append("</select>")
+                        return html.toString()
+                    '''
+                ]
+            ]
+        ],
+
+        // Site dropdown
+        [
+            $class: 'DynamicReferenceParameter',
+            name: 'SITE',
+            choiceType: 'ET_FORMATTED_HTML',
+            referencedParameters: 'OPERATION',
+            script: [
+                $class: 'GroovyScript',
+                script: [
+                    $class: 'SecureGroovyScript',
+                    sandbox: true,
+                    script: '''
+                        def siteMap = ['RCC':'RCC', 'WSDC':'WSDC', 'ALL':'BOTH']
+                        def defaultValue = 'ALL'
+                        if (OPERATION?.trim() != "example.py") return ""
+                        def html = new StringBuilder("<select name='value'>")
+                        siteMap.each { value, label ->
+                            def selected = (value == defaultValue) ? 'selected' : ''
+                            html.append("<option value='${value}' ${selected}>${label}</option>")
+                        }
+                        html.append("</select>")
+                        return html.toString()
+                    '''
+                ]
+            ]
+        ]
+    ])
+])
+
+// ===== Pipeline Definition =====
 pipeline {
     agent any
     options { ansiColor('xterm') }
-
-    parameters {
-        // Operation dropdown
-        activeChoiceParam('OPERATION') {
-            choiceType('SINGLE_SELECT')
-            groovyScript {
-                script('''
-                    def commandMap = [
-                        'example1.py': 'Stop AMH',
-                        'example.py': 'Start AMH',
-                        'example3.py': 'Restart AMH'
-                    ]
-                    return commandMap.keySet() as List
-                ''')
-                fallbackScript('return ["example.py"]')
-            }
-        }
-
-        // Individual checkbox
-        activeChoiceParam('INDIVIDUAL') {
-            choiceType('CHECKBOX')
-            groovyScript {
-                script('return [[name:"Individual Hosts", value:"true"]]')
-                fallbackScript('return []')
-            }
-        }
-
-        // Environment checkboxes
-            activeChoiceParam('ENVS') {
-                choiceType('CHECKBOX')
-                referencedParameter('OPERATION')
-                groovyScript {
-                    script('''
-                        if (OPERATION?.trim() != 'example.py') return []
-                        return ["UAT01", "UAT02", "UAT03"]
-                    ''')
-                    fallbackScript('return []')
-                }
-            }
-
-        // Component dropdown
-        activeChoiceParam('COMP') {
-            choiceType('SINGLE_SELECT')
-            referencedParameter('OPERATION')
-            groovyScript {
-                script('return ["STP","WB","ALL"]')
-                fallbackScript('return ["ALL"]')
-            }
-        }
-
-        // Site dropdown
-        activeChoiceParam('SITE') {
-            choiceType('SINGLE_SELECT')
-            referencedParameter('OPERATION')
-            groovyScript {
-                script('return ["RCC","WSDC","ALL"]')
-                fallbackScript('return ["ALL"]')
-            }
-        }
-    }
-
     environment {
         OPERATION = "${params.OPERATION}"
         ENVS = "${params.ENVS ?: ''}"
-        COMP = "${params.COMP ?: ''}"
+        COMPONENT = "${params.COMPONENT ?: ''}"
         SITE = "${params.SITE ?: ''}"
-        INDIVIDUAL = "${params.INDIVIDUAL ?: ''}"
+        INDIVIDUAL = "${params.INDIVIDUAL}"
     }
-
     stages {
         stage('Verify Params') {
             steps {
                 script {
                     echo "Operation: ${env.OPERATION}"
-                    echo "Environments: ${env.ENVS}"
-                    echo "Component: ${env.COMP}"
+                    echo "Selected Envs: ${env.ENVS}"
+                    echo "Component: ${env.COMPONENT}"
                     echo "Site: ${env.SITE}"
-                    echo "Individual: ${env.INDIVIDUAL}"
+                    echo "Individual hosts: ${env.INDIVIDUAL}"
 
-                    if (env.INDIVIDUAL.toBoolean() && !env.ENVS?.trim()) {
-                        error("No environments selected while INDIVIDUAL is enabled")
+                    if (params.INDIVIDUAL?.toBoolean() && !env.ENVS?.trim()) {
+                        error("No hosts selected! Individual is enabled but ENVS is empty.")
                     }
                 }
             }
@@ -106,19 +173,10 @@ pipeline {
         stage('Run Python') {
             steps {
                 script {
-                    def selectedEnvs = getSelectedKeys(envMap, env.ENVS ?: '')
-                    env.SELECTEDENVS = selectedEnvs
-                    echo "Running on environments: ${selectedEnvs}"
-                }
-
-                withCredentials([sshUserPrivateKey(
-                    credentialsId: '00b69538-5290-4373-a385-c2e59e5a4d9f',
-                    keyFileVariable: 'SSH_KEY',
-                    usernameVariable: 'SSH_USER')]) {
-                    sh '''
-                        echo "Using SSH key $SSH_KEY for $SSH_USER"
+                    sh """
+                        echo "Running operation $OPERATION on environments $ENVS with component $COMPONENT and site $SITE"
                         python3 -u ssh_runner.py
-                    '''
+                    """
                 }
             }
         }
@@ -126,7 +184,7 @@ pipeline {
 
     post {
         always {
-            echo "Archiving artifacts..."
+            echo 'Archiving artifacts...'
             archiveArtifacts artifacts: 'fetched/**/*', fingerprint: true, allowEmptyArchive: true
         }
     }
