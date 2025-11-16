@@ -17,7 +17,7 @@ properties([
         [$class: 'CascadeChoiceParameter',
             choiceType: 'PT_CHECKBOX',
             description: 'Select environments (only for Start AMH)',
-            name: 'ENV',
+            name: '\u200B',
             referencedParameters: 'OPERATION',   // ✅ makes it conditional
             script: [$class: 'GroovyScript',
                 script: [script: '''
@@ -40,7 +40,7 @@ pipeline {
   }
   environment {
     OPERATION = "${params.OPERATION}"
-    ENVS = "${params['ENV'] ?: ''}"
+    ENVS = "${params['\u200B'] ?: ''}"
   }
   stages {
     stage('Verify Params') {
