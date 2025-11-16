@@ -46,13 +46,13 @@ properties([
             name: '\u200B',
             referencedParameters: 'OPERATION',
             script: [$class: 'GroovyScript',
-                script: [script: '''
+                script: [script: """
                     if (OPERATION == "amhstart") {
                         return ${environments}
                     } else {
                         return []
                     }
-                ''', sandbox: true],
+                """, sandbox: true],
                 fallbackScript: [script: 'return ["ERROR"]', sandbox: true]
             ]
         ],
