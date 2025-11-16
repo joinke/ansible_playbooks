@@ -16,7 +16,7 @@ properties([
         // Checkbox list for ENV, reactive to OPERATION
         [$class: 'CascadeChoiceParameter',
             choiceType: 'PT_CHECKBOX',
-            description: 'Select environments (only for Start AMH)',
+            description: '',
             name: '\u200B',
             referencedParameters: 'OPERATION',   // ✅ makes it conditional
             script: [$class: 'GroovyScript',
