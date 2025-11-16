@@ -48,7 +48,7 @@ properties([
             script: [$class: 'GroovyScript',
                 script: [script: '''
                     if (OPERATION == "amhstart")
-                        return ["${environments}"]
+                        return ["UAT01","UAT02"]
                     } else {
                         return []
                     }
