@@ -1,4 +1,3 @@
-// Active Choices parameters
 properties([
     parameters([
         // Dropdown for OPERATION
@@ -14,46 +13,52 @@ properties([
             ]
         ],
 
-        // Reactive HTML checkbox list for ENV
-        [$class: 'DynamicReferenceParameter',
-            name: 'ENV',
-            description: 'Select environments (only shown for Start AMH)',
+        // Extra explanatory text block
+        [$class: 'CascadeChoiceParameter',
+            choiceType: 'PT_FORMATTED_HTML',   // ✅ formatted HTML
+            name: 'ENV_HELP',
+            description: 'Instructions',
             referencedParameters: 'OPERATION',
             script: [$class: 'GroovyScript',
                 script: [script: '''
                     if (OPERATION == "Start AMH (example.py)") {
-                        return """
-                            <b>Please select environments:</b><br>
-                            <input type='checkbox' name='value' value='UAT01'> UAT01<br>
-                            <input type='checkbox' name='value' value='UAT02'> UAT02<br>
-                            <input type='checkbox' name='value' value='UAT03'> UAT03<br>
-                        """
+                        return ["<b>Please select environments below:</b><br>(Only applies when starting AMH)"]
                     } else {
-                        return "<i>No environments required for this operation</i>"
+                        return ["<i>No environments required for this operation</i>"]
                     }
-                """, sandbox: true],
-                fallbackScript: [script: 'return "<i>No environments available</i>"', sandbox: true]
+                ''', sandbox: true],
+                fallbackScript: [script: 'return ["<i>No environments available</i>"]', sandbox: true]
+            ]
+        ],
+
+        // Checkbox list for ENV
+        [$class: 'CascadeChoiceParameter',
+            choiceType: 'PT_CHECKBOX',
+            description: 'Select environments',
+            name: 'ENV',
+            referencedParameters: 'OPERATION',
+            script: [$class: 'GroovyScript',
+                script: [script: '''
+                    if (OPERATION == "Start AMH (example.py)") {
+                        return ["UAT01","UAT02","UAT03"]
+                    } else {
+                        return []
+                    }
+                ''', sandbox: true],
+                fallbackScript: [script: 'return []', sandbox: true]
             ]
         ]
     ])
 ])
 
-// Declarative pipeline body
 pipeline {
   agent any
-  options {
-    ansiColor('xterm')
-  }
-  environment {
-    OPERATION = "${params.OPERATION}"
-    ENVS      = "${params['ENV'] ?: ''}"
-  }
   stages {
     stage('Print Params') {
       steps {
         script {
-          echo "Selected OPERATION: ${env.OPERATION}"
-          echo "Selected ENV: ${env.ENVS}"
+          echo "OPERATION: ${params.OPERATION}"
+          echo "ENV: ${params.ENV}"
         }
       }
     }
