@@ -85,7 +85,7 @@ properties([
         ],
         [
           $class: 'DynamicReferenceParameter',
-          name: '\u200B',
+          name: 'ENVS',
           referencedParameters: 'OPERATION',
           choiceType: 'ET_CHECKBOX',   // <-- WORKS WITH MAPS
           script: [
