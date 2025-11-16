@@ -48,7 +48,7 @@ properties([
             script: [$class: 'GroovyScript',
                 script: [script: """
                     if (OPERATION == "amhstart") {
-                        def envlist = ${environments}.split(',') as List
+                        def envlist = "${environments}.split(',')" 
                         return ["${envlist}"]
                     } else {
                         return []
