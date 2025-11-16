@@ -33,9 +33,29 @@ properties([
     ])
 ])
 
-node {
-    stage('Show Params') {
-        echo "OPERATION: ${params.OPERATION}"
-        echo "ENV: ${params.ENV}"
+pipeline {
+  agent any
+  options {
+    ansiColor('xterm')  // enable colored Ansible output
+  }
+  environment {
+    OPERATION = "${params.OPERATION}"
+    ENVS = "${params['\u200B'] ?: ''}"
+    COMPS = "${params['\u200C'] ?: ''}"
+    SITE = "${params['\u200D'] ?: ''}"
+    MYHOSTS = "${params['\u2060'] ?: ''}"
+    INDIVIDUAL = "${params.INDIVIDUAL}"
+  }
+  stages {
+    stage('Verify Params') {
+      steps {
+          script {
+              echo "Selected env is $env.ENVS and myhosts is $env.MYHOSTS"
+              if (params.INDIVIDUAL?.toBoolean() && (env.MYHOSTS == null || env.MYHOSTS.trim().isEmpty())) {
+                error("No Hosts Selected. You must select hosts when 'INDIVIDUAL' is enabled.")
+              }
+         }
+      }
     }
+  }
 }
