@@ -84,35 +84,25 @@ properties([
             ]
         ],
         [
-          $class: 'CascadeChoiceParameter',
-          choiceType: 'PT_MULTI_SELECT',
+          $class: 'DynamicReferenceParameter',
           name: '\u200B',
           referencedParameters: 'OPERATION',
+          choiceType: 'ET_MULTI_SELECT',
           script: [
             $class: 'GroovyScript',
             script: [
               $class: 'SecureGroovyScript',
               sandbox: true,
               script: '''
-                // Map of values → labels
-                def envMap = [
-                    'UAT01': 'Env UAT01',
-                    'UAT02': 'Env UAT02',
-                    'UAT03': 'Env UAT03'
-                ]
+                    if (OPERATION?.trim() != "example.py") {
+                        return []
+                    }
         
-                // Only show options if operation matches
-                if (OPERATION?.trim() != "example.py") {
-                    return []
-                }
-        
-                def defaultSelected = ['UAT02']
-        
-                // Active Choices format: "label|value"
-                return envMap.collect { value, label ->
-                    def entry = "${label}|${value}"
-                    return defaultSelected.contains(value) ? entry + "*": entry
-                }
+                    return [
+                        [name: "Env UAT01", value: "UAT01"],
+                        [name: "Env UAT02", value: "UAT02"],
+                        [name: "Env UAT03", value: "UAT03"]
+                    ]
               '''
             ]
           ]
