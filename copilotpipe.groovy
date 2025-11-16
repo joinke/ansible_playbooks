@@ -84,4 +84,23 @@ node {
         }
     }
 
-    stage('Run
+    stage('Run Python') {
+        echo "Running operation: ${params.OPERATION}"
+        echo "On environments: ${params.ENVS}"
+        echo "Component: ${params.COMP}, Site: ${params.SITE}"
+
+        withCredentials([sshUserPrivateKey(credentialsId: '00b69538-5290-4373-a385-c2e59e5a4d9f',
+                                           keyFileVariable: 'SSH_KEY',
+                                           usernameVariable: 'SSH_USER')]) {
+            sh '''
+                echo "🧩 Using SSH key from Jenkins: $SSH_KEY for user $SSH_USER"
+                python3 -u ssh_runner.py
+            '''
+        }
+    }
+
+    stage('Archive') {
+        echo '📦 Archiving fetched files...'
+        archiveArtifacts artifacts: 'fetched/**/*', fingerprint: true, allowEmptyArchive: true
+    }
+}
