@@ -6,7 +6,7 @@ properties([
             description: 'Enable feature?',
             name: 'FEATURE_FLAG',
             script: [$class: 'GroovyScript',
-                script: [script: 'return ["true","false"]', sandbox: true],
+                script: [script: 'return ["UAT01","UAT02"]', sandbox: true],
                 fallbackScript: [script: 'return ["false"]', sandbox: true]
             ]
         ]
