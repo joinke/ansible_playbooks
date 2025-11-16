@@ -101,7 +101,6 @@ pipeline {
       steps {
         script {
           echo "OPERATION: ${params['OPERATION']}"
-          echo "OPERATION2: ${params['OPERATION2']}"
           echo "ENV: ${params['\u200B']}"
           echo "COMP: ${params['\u200C']}"
         }
