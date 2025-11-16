@@ -70,7 +70,7 @@ properties([
                             html.append("<input type='checkbox' name='value' value='${value}' ${checked}> ${label}")
                             html.append("</label><br>")
                         }
-                        html.append("${test}")
+                        html.append("\${test}")
                         return html.toString()
                         } else {
                           return ''
