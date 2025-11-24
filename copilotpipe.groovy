@@ -29,7 +29,9 @@ node {
         def (value, label) = line.split(/\|/, 2)
         return "<option value='${value}'>${label}</option>"
     }.join('\n')
-    
+
+    echo "DEBUG: operations loaded = ${operations.size()}"
+    echo "DEBUG: Generated HTML:\n${operationsHtml}"
     // Dynamically create parameters
     properties([
         parameters([
