@@ -50,7 +50,14 @@ node {
                     script: [
                         script: '''
                             def html="<b>Choose an operation:</b><br>"
-                    
+                            def operationsFile = "${env.WORKSPACE}/operations.txt"
+                            if (fileExists(operationsFile)) {
+                                operations = readFile(operationsFile)
+                                          .split('\n')
+                                          .findAll { it.trim() } // remove blank lines
+                            } else {
+                                error "operations.txt not found in workspace: ${operationsFile}"
+                            }
                             html+="<select name='value'>"
                             html+="${operationsHtml}"
                             html+="</select>"
