@@ -58,9 +58,10 @@ node {
                     
                             def options = []
                             file.eachLine { line ->
-                                if (line.trim()) {
-                                    def parts = line.split("\\\\|", 2)   // escape |
-                                    options << "<option value='${parts[0]}'>${parts[1] ?: parts[0]}</option>"
+                                line = line.trim()
+                                if (line) {
+                                    def parts = line.split("\\\\|", 2)   // split on |
+                                    options << "<option value='${'$'}{parts[0]}'>${'$'}{parts[1] ?: parts[0]}</option>"
                                 }
                             }
                     
