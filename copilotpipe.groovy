@@ -1,7 +1,7 @@
 node {
 
     // Optional: checkout source code
-    checkout scm
+    //checkout scm
 
     // Read choices from workspace
     def choices = []
