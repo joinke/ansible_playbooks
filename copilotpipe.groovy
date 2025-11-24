@@ -48,14 +48,14 @@ node {
                 script: [
                     $class: 'GroovyScript',
                     script: [
-                        script: """
-                            return \"\"\"
+                        script: '''
+                            return """
                                 <b>Choose an operation:</b><br>
                                 <select name='value'>
                                     ${operationsHtml}
                                 </select>
-                            \"\"\"
-                        """,
+                            """
+                        ''',
                         sandbox: false  // must be false when using Groovy variables
                     ],
                     fallbackScript: [
