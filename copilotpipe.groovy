@@ -16,7 +16,7 @@ node {
     // Dynamically create parameters
     properties([
         parameters([
-            choice(name: 'MY_PARAM', choices: choices, description: 'Pick one')           
+            choice(name: 'MY_PARAM', choices: choices, description: 'Pick one'),           
             [$class: 'DynamicReferenceParameter',
                 name: 'OPERATION',
                 choiceType: 'ET_FORMATTED_HTML',
