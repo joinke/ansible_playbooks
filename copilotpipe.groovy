@@ -1,5 +1,5 @@
 def getChoices() {
-    def file = new File("${workspace}/options.txt")
+    def file = new File("${WORKSPACE}/options.txt")
     return file.readLines()
 }
 
