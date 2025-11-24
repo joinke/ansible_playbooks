@@ -13,6 +13,23 @@ node {
         error "options.txt not found in workspace: ${optionsFile}"
     }
 
+    def operations = []
+    def operationsFile = "${env.WORKSPACE}/operations.txt"
+    
+    if (fileExists(operationsFile)) {
+        operations = readFile(operationsFile)
+                      .split('\n')
+                      .findAll { it.trim() } // remove blank lines
+    } else {
+        error "operations.txt not found in workspace: ${operationsFile}"
+    }
+    
+    // Convert each operation line into an HTML <option>
+    def operationsHtml = operations.collect { line ->
+        def (value, label) = line.split(/\|/, 2)
+        return "<option value='${value}'>${label}</option>"
+    }.join('\n')
+    
     // Dynamically create parameters
     properties([
         parameters([
