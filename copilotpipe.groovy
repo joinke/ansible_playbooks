@@ -49,12 +49,12 @@ node {
                     $class: 'GroovyScript',
                     script: [
                         script: '''
-                            return """
-                                <b>Choose an operation:</b><br>
-                                <select name='value'>
-                                    ${operationsHtml}
-                                </select>
-                            """
+                            def html="<b>Choose an operation:</b><br>"
+                    
+                            html+="<select name='value'>"
+                            html+="${operationsHtml}"
+                            html+="</select>"
+                            return html
                         ''',
                         sandbox: false  // must be false when using Groovy variables
                     ],
