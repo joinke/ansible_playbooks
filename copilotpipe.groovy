@@ -48,29 +48,29 @@ node {
                 script: [
                     $class: 'GroovyScript',
                     script: [
-                        script: """
-                            def html = "<b>Choose an operation:</b><br>"
-                    
-                            def file = new File('/var/jenkins_home/operations.txt')
-                            if (!file.exists()) {
-                                return "<i>operations.txt not found on controller</i>"
-                            }
-                    
-                            def options = []
-                            file.eachLine { line ->
-                                line = line.trim()
-                                if (line) {
-                                    def parts = line.split("\\\\|", 2)   // split on |
-                                    options << "<option value='${'$'}{parts[0]}'>${'$'}{parts[1] ?: parts[0]}</option>"
-                                }
-                            }
-                    
-                            html += "<select name='value'>"
-                            html += options.join("\\n")
-                            html += "</select>"
-                    
-                            return html
-                        """,
+        script: """
+            def html = "<b>Choose an operation:</b><br>"
+
+            def file = new File('/var/jenkins_home/operations.txt')
+            if (!file.exists()) {
+                return "<i>operations.txt not found on controller</i>"
+            }
+
+            def options = []
+            file.eachLine { line ->
+                line = line.trim()
+                if (line) {
+                    def parts = line.split("\\|", 2)   // split on |
+                    options << "<option value='${parts[0]}'>${parts[1] ?: parts[0]}</option>"
+                }
+            }
+
+            html += "<select name='value'>"
+            html += options.join("\\n")
+            html += "</select>"
+
+            return html
+        """,
                         sandbox: false  // must be false when using Groovy variables
                     ],
                     fallbackScript: [
