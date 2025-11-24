@@ -33,25 +33,35 @@ node {
     // Dynamically create parameters
     properties([
         parameters([
-            choice(name: 'MY_PARAM', choices: choices, description: 'Pick one'),           
-            [$class: 'DynamicReferenceParameter',
+            choice(
+                name: 'MY_PARAM',
+                choices: choices,
+                description: 'Pick one'
+            ),
+            [
+                $class: 'DynamicReferenceParameter',
                 name: 'OPERATION',
                 choiceType: 'ET_FORMATTED_HTML',
                 description: 'Select the operation',
-                script: [$class: 'GroovyScript',
-                    script: [script: '''
-                        return """
-                            <b>Choose an operation:</b><br>
-                            <select name='value'>
-                              <option value='amhstart'>Start AMH</option>
-                              <option value='amhstop'>Stop AMH</option>
-                              <option value='amhrestart'>Restart AMH</option>
-                            </select>
-                        """
-                    ''', sandbox: true],
-                    fallbackScript: [script: 'return "<i>No operations available</i>"', sandbox: true]
+                script: [
+                    $class: 'GroovyScript',
+                    script: [
+                        script: """
+                            return \"\"\"
+                                <b>Choose an operation:</b><br>
+                                <select name='value'>
+                                    ${operationsHtml}
+                                </select>
+                            \"\"\"
+                        """,
+                        sandbox: false  // must be false when using Groovy variables
+                    ],
+                    fallbackScript: [
+                        script: 'return "<i>No operations available</i>"',
+                        sandbox: true
+                    ]
                 ]
-            ]    
+            ]
         ])
     ])
 
