@@ -48,25 +48,28 @@ node {
                 script: [
                     $class: 'GroovyScript',
                     script: [
-                        script: '''
-                            def html="<b>Choose an operation:</b><br>"
-                            def operationsFile = "${env.WORKSPACE}/operations.txt"
-                            if (fileExists(operationsFile)) {
-                                operations = readFile(operationsFile)
-                                          .split('\n')
-                                          .findAll { it.trim() } // remove blank lines
-                            } else {
-                                error "operations.txt not found in workspace: ${operationsFile}"
+                        script: """
+                            def html = "<b>Choose an operation:</b><br>"
+                    
+                            def file = new File('/var/jenkins_home/operations.txt')
+                            if (!file.exists()) {
+                                return "<i>operations.txt not found on controller</i>"
                             }
-                                def operationsHtml = operations.collect { line ->
-                                    def (value, label) = line.split(/\|/, 2)
-                                    return "<option value='${value}'>${label}</option>"
-                                    }.join('\n')
-                            html+="<select name='value'>"
-                            html+="${operationsHtml}"
-                            html+="</select>"
+                    
+                            def options = []
+                            file.eachLine { line ->
+                                if (line.trim()) {
+                                    def parts = line.split("\\\\|", 2)   // escape |
+                                    options << "<option value='${parts[0]}'>${parts[1] ?: parts[0]}</option>"
+                                }
+                            }
+                    
+                            html += "<select name='value'>"
+                            html += options.join("\\n")
+                            html += "</select>"
+                    
                             return html
-                        ''',
+                        """,
                         sandbox: false  // must be false when using Groovy variables
                     ],
                     fallbackScript: [
