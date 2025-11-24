@@ -58,6 +58,10 @@ node {
                             } else {
                                 error "operations.txt not found in workspace: ${operationsFile}"
                             }
+                                def operationsHtml = operations.collect { line ->
+                                    def (value, label) = line.split(/\|/, 2)
+                                    return "<option value='${value}'>${label}</option>"
+                                    }.join('\n')
                             html+="<select name='value'>"
                             html+="${operationsHtml}"
                             html+="</select>"
