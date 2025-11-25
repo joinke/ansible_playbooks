@@ -1,51 +1,36 @@
 pipeline {
     agent any
 
-    // No parameters defined here yet; we'll define them dynamically in the first stage
+    parameters {
+        extendedChoice(
+            name: 'OPERATIONS',
+            type: 'PT_CHECKBOX',          // checkboxes
+            description: 'Select one or more operations',
+            multiSelectDelimiter: ',',    // delimiter for multiple selections
+            groovyScript: '''
+                import java.nio.file.Files
+                import java.nio.file.Paths
+
+                def path = '/var/jenkins_home/operations.txt'
+                if (!Files.exists(Paths.get(path))) {
+                    return ["ERROR: operations.txt not found"]
+                }
+
+                def lines = new File(path).readLines()
+                // Extract first part before | and ignore empty lines
+                return lines.collect { it.split("\\|")[0].trim() }.findAll { it }
+            '''
+        )
+    }
+
     stages {
-        stage('Setup Parameter') {
+        stage('Show selected operations') {
             steps {
                 script {
-                    // Ensure the file exists
-                    def opsFile = "${env.WORKSPACE}/operations.txt"
-                    if (!fileExists(opsFile)) {
-                        error "File operations.txt not found in workspace!"
-                    }
-
-                    // Read operations.txt and extract the first part before '|' as the choice
-                    def choices = readFile(opsFile)
-                                    .readLines()
-                                    .collect { line -> 
-                                        def trimmed = line.trim()
-                                        if (!trimmed) return null
-                                        return trimmed.split("\\|")[0].trim()
-                                    }
-                                    .findAll { it } // remove nulls / empty strings
-
-                    if (!choices) {
-                        error "No valid operations found in operations.txt"
-                    }
-
-                    // Dynamically create the Choice Parameter
-                    properties([
-                        parameters([
-                            choice(
-                                name: 'OPERATION',
-                                choices: choices.join('\n'),
-                                description: 'Select an operation'
-                            )
-                        ])
-                    ])
-
-                    echo "Choices setup: ${choices}"
+                    // params.OPERATIONS will be a comma-separated string
+                    def selectedOps = params.OPERATIONS?.split(',') ?: []
+                    echo "Selected operations: ${selectedOps}"
                 }
-            }
-        }
-
-        stage('Run') {
-            steps {
-                echo "Selected operation: ${params.OPERATION}"
-                // Here you can run the actual logic based on the choice
             }
         }
     }
