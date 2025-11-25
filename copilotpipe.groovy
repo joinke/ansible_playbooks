@@ -64,7 +64,7 @@ def lines = file.readLines()
 def options = []
 
 lines.each { line ->
-    def trimmedLine = line.trim()        // <- use 'def' here
+    def trimmedLine = line?.trim()        // <- use 'def' here
     if (!trimmedLine) return
 
     def parts = trimmedLine.split("\\|", 2)
