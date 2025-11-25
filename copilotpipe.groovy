@@ -56,22 +56,23 @@ node {
 
             def file = new File('/var/jenkins_home/operations.txt')
             if (!file.exists()) {
-                return "<div style='color:red'><b>Error:</b> operations.txt not found on controller at /var/jenkins_home/operations.txt</div>"
+                return "<div style='color:red'><b>Error:</b> operations.txt not found at /var/jenkins_home/operations.txt</div>"
             }
 
             def options = []
-            def lineNo = 0
-            file.eachLine { line ->
-                lineNo++
-                line = line.trim()
-                if (!line) return                      // skip blank lines
+            def lines = file.readLines()
 
-                def parts = line.split("\\\\|", 2)
+            for (int i = 0; i < lines.size(); i++) {
+                def raw = lines[i].trim()
+                def lineNo = i + 1
+
+                if (!raw) continue
+
+                def parts = raw.split("\\\\|", 2)
 
                 if (parts.size() < 1 || parts[0].trim() == "") {
-                    // invalid format
-                    html += "<div style='color:red'>Invalid line at ${lineNo}: '${escape(line)}'</div>"
-                    return
+                    html += "<div style='color:red'>Invalid line at ${lineNo}: '\${escape(raw)}'</div>"
+                    continue
                 }
 
                 def value = escape(parts[0].trim())
@@ -84,13 +85,15 @@ node {
                 return "<div style='color:red'><b>Error:</b> No valid operations found in operations.txt</div>"
             }
 
-            // Autoselect first option
+            // Auto-select first option
             html += "<select name='value'>"
-            options.eachWithIndex { opt, idx ->
-                if (idx == 0)
-                    html += "<option value='${opt.value}' selected>${opt.label}</option>"
-                else
-                    html += "<option value='${opt.value}'>${opt.label}</option>"
+            for (int i = 0; i < options.size(); i++) {
+                def opt = options[i]
+                if (i == 0) {
+                    html += "<option value='\${opt.value}' selected>\${opt.label}</option>"
+                } else {
+                    html += "<option value='\${opt.value}'>\${opt.label}</option>"
+                }
             }
             html += "</select>"
 
