@@ -64,16 +64,16 @@ def lines = file.readLines()
 def options = []
 
 lines.each { line ->
-    def rawLine = line.trim()
-    if (!rawLine) return // skip empty lines
+    def trimmedLine = line.trim()        // <- use 'def' here
+    if (!trimmedLine) return
 
-    def parts = rawLine.split("\\|", 2)
+    def parts = trimmedLine.split("\\|", 2)
     if (!parts[0]?.trim()) {
-        html += "<div style=\"color:red\">Invalid entry: '${escape(rawLine)}'</div>"
+        html += "<div style=\"color:red\">Invalid entry: '${escape(trimmedLine)}'</div>"
         return
     }
 
-    def value = escape(parts[0].trim())
+    def value = escape(parts[0].trim())  // <- use 'def' here
     def label = escape(parts.length > 1 ? parts[1].trim() : parts[0].trim())
 
     options << [value: value, label: label]
