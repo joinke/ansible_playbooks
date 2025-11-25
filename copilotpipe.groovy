@@ -41,68 +41,40 @@ node {
                 description: 'Pick one'
             ),
 [
-    $class: 'DynamicReferenceParameter',
-    name: 'OPERATION',
-    choiceType: 'ET_FORMATTED_HTML',
-    description: 'Select the operation',
+  $class: 'DynamicReferenceParameter',
+  name: 'OPERATION',
+  choiceType: 'ET_FORMATTED_HTML',
+  description: 'Select the operation',
+  script: [
+    $class: 'GroovyScript',
     script: [
-        $class: 'SecureGroovyScript',
-        script: '''
-            import org.apache.commons.text.StringEscapeUtils
+      $class: 'SecureGroovyScript',
+      script: """
+          def file = new File('/var/jenkins_home/operations.txt')
+          if (!file.exists()) {
+              return "<b style='color:red'>operations.txt not found</b>"
+          }
 
-            def escape = { s -> StringEscapeUtils.escapeHtml4(s ?: '') }
+          def html = "<b>Choose an operation:</b><br><select name='value'>"
 
-            def html = "<b>Choose an operation:</b><br>"
+          file.eachLine { line ->
+              line = line.trim()
+              if (!line) return
 
-            def file = new File('/var/jenkins_home/operations.txt')
-            if (!file.exists()) {
-                return "<div style=\\"color:red\\"><b>Error:</b> operations.txt not found</div>"
-            }
+              def parts = line.split("\\|", 2)
+              def value = parts[0]
+              def label = (parts.length > 1 ? parts[1] : parts[0])
 
-            List lines = file.readLines()
-            List options = []
+              html += "<option value='${value}'>${label}</option>"
+          }
 
-            for (int i = 0; i < lines.size(); i++) {
-                String raw = lines.get(i).trim()
-
-                if (raw.length() == 0) continue
-
-                String[] parts = raw.split("\\\\|", 2)
-
-                if (parts.length == 0 || parts[0].trim().length() == 0) {
-                    html += "<div style=\\"color:red\\">Invalid entry: '\${escape(raw)}'</div>"
-                    continue
-                }
-
-                String value = escape(parts[0].trim())
-                String label = escape(parts.length > 1 ? parts[1].trim() : parts[0].trim())
-
-                options.add([value: value, label: label])
-            }
-
-            if (options.isEmpty()) {
-                return "<div style=\\"color:red\\"><b>Error:</b> No valid operations found.</div>"
-            }
-
-            html += "<select name='value'>"
-            for (int i = 0; i < options.size(); i++) {
-                def opt = options.get(i)
-                if (i == 0)
-                    html += "<option selected value='\${opt.value}'>\${opt.label}</option>"
-                else
-                    html += "<option value='\${opt.value}'>\${opt.label}</option>"
-            }
-            html += "</select>"
-
-            return html
-        ''',
-        sandbox: false
+          html += "</select>"
+          return html
+      """,
+      sandbox: false
     ],
-    fallbackScript: [
-        $class: 'SecureGroovyScript',
-        script: 'return "<i>No operations available</i>"',
-        sandbox: true
-    ]
+    /* UNO-CHOICE HAS NO fallbackScript → REMOVE IT */
+  ]
 ]
 
         ])
