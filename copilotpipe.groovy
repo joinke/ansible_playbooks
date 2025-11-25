@@ -56,41 +56,45 @@ node {
 
             def file = new File('/var/jenkins_home/operations.txt')
             if (!file.exists()) {
-                return "<div style='color:red'><b>Error:</b> operations.txt not found at /var/jenkins_home/operations.txt</div>"
+                return "<div style='color:red'><b>Error:</b> operations.txt not found</div>"
             }
 
-            def options = []
-            def lines = file.readLines()
+            // Read all lines safely
+            List lines = file.readLines()
+            List options = []
 
             for (int i = 0; i < lines.size(); i++) {
-                def raw = lines[i].trim()
-                def lineNo = i + 1
+                String raw = lines.get(i).trim()
 
-                if (!raw) continue
-
-                def parts = raw.split("\\\\|", 2)
-
-                if (parts.size() < 1 || parts[0].trim() == "") {
-                    html += "<div style='color:red'>Invalid line at ${lineNo}: '\${escape(raw)}'</div>"
+                if (raw.length() == 0) {
                     continue
                 }
 
-                def value = escape(parts[0].trim())
-                def label = escape(parts.size() > 1 ? parts[1].trim() : parts[0].trim())
+                // Split only once on |
+                String[] parts = raw.split("\\\\|", 2)
 
-                options << [value: value, label: label]
+                if (parts.length == 0 || parts[0].trim().length() == 0) {
+                    // NO USE OF lineNo ANYWHERE
+                    html += "<div style='color:red'>Invalid entry: '\${escape(raw)}'</div>"
+                    continue
+                }
+
+                String value = escape(parts[0].trim())
+                String label = escape(parts.length > 1 ? parts[1].trim() : parts[0].trim())
+
+                options.add([value: value, label: label])
             }
 
             if (options.isEmpty()) {
-                return "<div style='color:red'><b>Error:</b> No valid operations found in operations.txt</div>"
+                return "<div style='color:red'><b>Error:</b> No valid operations found.</div>"
             }
 
-            // Auto-select first option
+            // Build dropdown (first option auto-selected)
             html += "<select name='value'>"
             for (int i = 0; i < options.size(); i++) {
-                def opt = options[i]
+                def opt = options.get(i)
                 if (i == 0) {
-                    html += "<option value='\${opt.value}' selected>\${opt.label}</option>"
+                    html += "<option selected value='\${opt.value}'>\${opt.label}</option>"
                 } else {
                     html += "<option value='\${opt.value}'>\${opt.label}</option>"
                 }
