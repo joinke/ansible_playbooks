@@ -1,41 +1,26 @@
 pipeline {
     agent any
-
-    // Parameters will be passed from your form
-    parameters {
-        string(name: 'COMMAND', defaultValue: '', description: 'Command selected from frontend')
-        string(name: 'OPTIONS', defaultValue: '', description: 'Comma-separated options selected')
+    environment {
+        RAW_JSON = "${raw_content}"  // raw JSON from webhook
     }
-
     stages {
-        stage('Print Inputs') {
+        stage('Parse JSON') {
             steps {
                 script {
-                    echo "Command received: ${params.COMMAND}"
-                    echo "Options received: ${params.OPTIONS}"
+                    def data = readJSON text: env.RAW_JSON
+                    def command = data.command
+                    def options = data.options
 
-                    // Convert comma-separated options to a list
-                    def optionsList = params.OPTIONS.split(',').collect { it.trim() }
-                    echo "Options as list: ${optionsList}"
+                    echo "Command: ${command}"
+                    echo "Options: ${options}"
 
-                    // Example: conditional execution
-                    if (params.COMMAND == 'deploy') {
-                        echo "Triggering deploy pipeline..."
-                        // sh "deploy_script.sh ${params.OPTIONS}"
-                    } else if (params.COMMAND == 'test') {
-                        echo "Running tests..."
-                        // sh "test_script.sh ${params.OPTIONS}"
-                    } else {
-                        echo "Unknown command, skipping execution."
+                    if (command == 'deploy') {
+                        echo "Deploying to: ${options}"
+                    } else if (command == 'test') {
+                        echo "Testing types: ${options}"
                     }
                 }
             }
-        }
-    }
-
-    post {
-        always {
-            echo "Pipeline finished"
         }
     }
 }
