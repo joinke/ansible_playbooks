@@ -46,8 +46,8 @@ node {
     choiceType: 'ET_FORMATTED_HTML',
     description: 'Select the operation',
     script: [
-        $class: 'GroovyScript',
-        script: """
+        $class: 'SecureGroovyScript',
+        script: '''
             import org.apache.commons.text.StringEscapeUtils
 
             def escape = { s -> StringEscapeUtils.escapeHtml4(s ?: '') }
@@ -56,26 +56,21 @@ node {
 
             def file = new File('/var/jenkins_home/operations.txt')
             if (!file.exists()) {
-                return "<div style='color:red'><b>Error:</b> operations.txt not found</div>"
+                return "<div style=\\"color:red\\"><b>Error:</b> operations.txt not found</div>"
             }
 
-            // Read all lines safely
             List lines = file.readLines()
             List options = []
 
             for (int i = 0; i < lines.size(); i++) {
                 String raw = lines.get(i).trim()
 
-                if (raw.length() == 0) {
-                    continue
-                }
+                if (raw.length() == 0) continue
 
-                // Split only once on |
                 String[] parts = raw.split("\\\\|", 2)
 
                 if (parts.length == 0 || parts[0].trim().length() == 0) {
-                    // NO USE OF lineNo ANYWHERE
-                    html += "<div style='color:red'>Invalid entry: '\${escape(raw)}'</div>"
+                    html += "<div style=\\"color:red\\">Invalid entry: '\${escape(raw)}'</div>"
                     continue
                 }
 
@@ -86,30 +81,26 @@ node {
             }
 
             if (options.isEmpty()) {
-                return "<div style='color:red'><b>Error:</b> No valid operations found.</div>"
+                return "<div style=\\"color:red\\"><b>Error:</b> No valid operations found.</div>"
             }
 
-            // Build dropdown (first option auto-selected)
             html += "<select name='value'>"
             for (int i = 0; i < options.size(); i++) {
                 def opt = options.get(i)
-                if (i == 0) {
+                if (i == 0)
                     html += "<option selected value='\${opt.value}'>\${opt.label}</option>"
-                } else {
+                else
                     html += "<option value='\${opt.value}'>\${opt.label}</option>"
-                }
             }
             html += "</select>"
 
             return html
-        """,
+        ''',
         sandbox: false
     ],
     fallbackScript: [
-        $class: 'GroovyScript',
-        script: """
-            return "<i>No operations available</i>"
-        """,
+        $class: 'SecureGroovyScript',
+        script: 'return "<i>No operations available</i>"',
         sandbox: true
     ]
 ]
