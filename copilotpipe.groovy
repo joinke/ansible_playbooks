@@ -40,45 +40,73 @@ node {
                 choices: choices,
                 description: 'Pick one'
             ),
-            [
-                $class: 'DynamicReferenceParameter',
-                name: 'OPERATION',
-                choiceType: 'ET_FORMATTED_HTML',
-                description: 'Select the operation',
-                script: [
-                    $class: 'GroovyScript',
-                    script: [
+[
+    $class: 'DynamicReferenceParameter',
+    name: 'OPERATION',
+    choiceType: 'ET_FORMATTED_HTML',
+    description: 'Select the operation',
+    script: [
+        $class: 'GroovyScript',
         script: """
+            import org.apache.commons.text.StringEscapeUtils
+
+            def escape = { s -> StringEscapeUtils.escapeHtml4(s ?: '') }
+
             def html = "<b>Choose an operation:</b><br>"
-            
+
             def file = new File('/var/jenkins_home/operations.txt')
             if (!file.exists()) {
-                return "<i>operations.txt not found on controller</i>"
+                return "<div style='color:red'><b>Error:</b> operations.txt not found on controller at /var/jenkins_home/operations.txt</div>"
             }
-            
+
             def options = []
+            def lineNo = 0
             file.eachLine { line ->
+                lineNo++
                 line = line.trim()
-                if (line) {
-                    def parts = line.split("\\|", 2)   // split on |
-                    options << "<option value='${parts[0]}'>${parts[1] ?: parts[0]}</option>"
+                if (!line) return                      // skip blank lines
+
+                def parts = line.split("\\\\|", 2)
+
+                if (parts.size() < 1 || parts[0].trim() == "") {
+                    // invalid format
+                    html += "<div style='color:red'>Invalid line at ${lineNo}: '${escape(line)}'</div>"
+                    return
                 }
+
+                def value = escape(parts[0].trim())
+                def label = escape(parts.size() > 1 ? parts[1].trim() : parts[0].trim())
+
+                options << [value: value, label: label]
             }
-            
+
+            if (options.isEmpty()) {
+                return "<div style='color:red'><b>Error:</b> No valid operations found in operations.txt</div>"
+            }
+
+            // Autoselect first option
             html += "<select name='value'>"
-            html += options.join("\n")
+            options.eachWithIndex { opt, idx ->
+                if (idx == 0)
+                    html += "<option value='${opt.value}' selected>${opt.label}</option>"
+                else
+                    html += "<option value='${opt.value}'>${opt.label}</option>"
+            }
             html += "</select>"
-            
+
             return html
         """,
-                        sandbox: false  // must be false when using Groovy variables
-                    ],
-                    fallbackScript: [
-                        script: 'return "<i>No operations available</i>"',
-                        sandbox: true
-                    ]
-                ]
-            ]
+        sandbox: false
+    ],
+    fallbackScript: [
+        $class: 'GroovyScript',
+        script: """
+            return "<i>No operations available</i>"
+        """,
+        sandbox: true
+    ]
+]
+
         ])
     ])
 
