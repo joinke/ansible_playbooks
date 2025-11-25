@@ -1,57 +1,41 @@
 pipeline {
     agent any
 
+    // Parameters will be passed from your form
     parameters {
-        // Active Choices Parameter for multi-select checkboxes
-        activeChoiceParam(name: 'OPERATIONS') {
-            description('Select one or more operations')
-            filterable(false)
-            choiceType('CHECKBOX')  // can also be 'MULTI_SELECT'
-            groovyScript {
-                script("""
-                    import java.nio.file.Files
-                    import java.nio.file.Paths
+        string(name: 'COMMAND', defaultValue: '', description: 'Command selected from frontend')
+        string(name: 'OPTIONS', defaultValue: '', description: 'Comma-separated options selected')
+    }
 
-                    def filePath = '/var/jenkins_home/operations.txt'
-                    def operations = []
+    stages {
+        stage('Print Inputs') {
+            steps {
+                script {
+                    echo "Command received: ${params.COMMAND}"
+                    echo "Options received: ${params.OPTIONS}"
 
-                    if (Files.exists(Paths.get(filePath))) {
-                        operations = new File(filePath).readLines()
-                            .collect { it.split("\\|")[0].trim() }  // take first column
-                            .findAll { it }                          // remove empty lines
+                    // Convert comma-separated options to a list
+                    def optionsList = params.OPTIONS.split(',').collect { it.trim() }
+                    echo "Options as list: ${optionsList}"
+
+                    // Example: conditional execution
+                    if (params.COMMAND == 'deploy') {
+                        echo "Triggering deploy pipeline..."
+                        // sh "deploy_script.sh ${params.OPTIONS}"
+                    } else if (params.COMMAND == 'test') {
+                        echo "Running tests..."
+                        // sh "test_script.sh ${params.OPTIONS}"
                     } else {
-                        operations = ["ERROR: operations.txt not found"]
+                        echo "Unknown command, skipping execution."
                     }
-
-                    return operations
-                """.stripIndent())
-                fallbackScript('return ["ERROR reading file"]')
+                }
             }
         }
     }
 
-    stages {
-        stage('Show Selected') {
-            steps {
-                script {
-                    echo "Selected operations: ${params.OPERATIONS}"
-                }
-            }
-        }
-
-        stage('Do Operations') {
-            steps {
-                script {
-                    if (params.OPERATIONS) {
-                        params.OPERATIONS.each { op ->
-                            echo "Processing operation: ${op}"
-                            // place your operation logic here
-                        }
-                    } else {
-                        echo "No operations selected."
-                    }
-                }
-            }
+    post {
+        always {
+            echo "Pipeline finished"
         }
     }
 }
