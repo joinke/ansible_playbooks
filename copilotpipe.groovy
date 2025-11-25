@@ -50,26 +50,55 @@ node {
     script: [
       $class: 'SecureGroovyScript',
       script: """
-          def file = new File('/var/jenkins_home/operations.txt')
-          if (!file.exists()) {
-              return "<b style='color:red'>operations.txt not found</b>"
-          }
+import org.apache.commons.text.StringEscapeUtils
 
-          def html = "<b>Choose an operation:</b><br><select name='value'>"
+// Escape HTML safely
+def escape = { s -> StringEscapeUtils.escapeHtml4(s ?: '') }
 
-          file.eachLine { line ->
-              line = line.trim()
-              if (!line) return
+def html = "<b>Choose an operation:</b><br>"
 
-              def parts = line.split("\\|", 2)
-              def value = parts[0]
-              def label = (parts.length > 1 ? parts[1] : parts[0])
+// Load operations from file
+def file = new File('/var/jenkins_home/operations.txt')
+if (!file.exists()) {
+    return "<div style=\"color:red\"><b>Error:</b> operations.txt not found</div>"
+}
 
-              html += "<option value='${value}'>${label}</option>"
-          }
+def lines = file.readLines()
+def options = []
 
-          html += "</select>"
-          return html
+// Process each line
+lines.each { line ->
+    def raw = line.trim()
+    if (!raw) return  // skip empty lines
+
+    def parts = raw.split("\\|", 2)
+    if (!parts[0]?.trim()) {
+        html += "<div style=\"color:red\">Invalid entry: '${escape(raw)}'</div>"
+        return
+    }
+
+    def value = escape(parts[0].trim())
+    def label = escape(parts.length > 1 ? parts[1].trim() : parts[0].trim())
+
+    options << [value: value, label: label]
+}
+
+if (options.isEmpty()) {
+    return "<div style=\"color:red\"><b>Error:</b> No valid operations found.</div>"
+}
+
+// Build <select> element
+html += "<select name='value'>"
+options.eachWithIndex { opt, idx ->
+    if (idx == 0) {
+        html += "<option selected value='${opt.value}'>${opt.label}</option>"
+    } else {
+        html += "<option value='${opt.value}'>${opt.label}</option>"
+    }
+}
+html += "</select>"
+
+return html
       """,
       sandbox: false
     ],
