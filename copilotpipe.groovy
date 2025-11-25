@@ -2,34 +2,54 @@ pipeline {
     agent any
 
     parameters {
-        extendedChoice(
-            name: 'OPERATIONS',
-            type: 'PT_CHECKBOX',          // checkboxes
-            description: 'Select one or more operations',
-            multiSelectDelimiter: ',',    // delimiter for multiple selections
-            groovyScript: '''
-                import java.nio.file.Files
-                import java.nio.file.Paths
+        // Active Choices Parameter for multi-select checkboxes
+        activeChoiceParam(name: 'OPERATIONS') {
+            description('Select one or more operations')
+            filterable(false)
+            choiceType('CHECKBOX')  // can also be 'MULTI_SELECT'
+            groovyScript {
+                script("""
+                    import java.nio.file.Files
+                    import java.nio.file.Paths
 
-                def path = '/var/jenkins_home/operations.txt'
-                if (!Files.exists(Paths.get(path))) {
-                    return ["ERROR: operations.txt not found"]
-                }
+                    def filePath = '/var/jenkins_home/operations.txt'
+                    def operations = []
 
-                def lines = new File(path).readLines()
-                // Extract first part before | and ignore empty lines
-                return lines.collect { it.split("\\|")[0].trim() }.findAll { it }
-            '''
-        )
+                    if (Files.exists(Paths.get(filePath))) {
+                        operations = new File(filePath).readLines()
+                            .collect { it.split("\\|")[0].trim() }  // take first column
+                            .findAll { it }                          // remove empty lines
+                    } else {
+                        operations = ["ERROR: operations.txt not found"]
+                    }
+
+                    return operations
+                """.stripIndent())
+                fallbackScript('return ["ERROR reading file"]')
+            }
+        }
     }
 
     stages {
-        stage('Show selected operations') {
+        stage('Show Selected') {
             steps {
                 script {
-                    // params.OPERATIONS will be a comma-separated string
-                    def selectedOps = params.OPERATIONS?.split(',') ?: []
-                    echo "Selected operations: ${selectedOps}"
+                    echo "Selected operations: ${params.OPERATIONS}"
+                }
+            }
+        }
+
+        stage('Do Operations') {
+            steps {
+                script {
+                    if (params.OPERATIONS) {
+                        params.OPERATIONS.each { op ->
+                            echo "Processing operation: ${op}"
+                            // place your operation logic here
+                        }
+                    } else {
+                        echo "No operations selected."
+                    }
                 }
             }
         }
