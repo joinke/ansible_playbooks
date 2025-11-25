@@ -52,12 +52,9 @@ node {
       script: """
 import org.apache.commons.text.StringEscapeUtils
 
-// Escape HTML safely
 def escape = { s -> StringEscapeUtils.escapeHtml4(s ?: '') }
-
 def html = "<b>Choose an operation:</b><br>"
 
-// Load operations from file
 def file = new File('/var/jenkins_home/operations.txt')
 if (!file.exists()) {
     return "<div style=\"color:red\"><b>Error:</b> operations.txt not found</div>"
@@ -66,14 +63,13 @@ if (!file.exists()) {
 def lines = file.readLines()
 def options = []
 
-// Process each line
 lines.each { line ->
-    def raw = line.trim()
-    if (!raw) return  // skip empty lines
+    def rawLine = line.trim()
+    if (!rawLine) return // skip empty lines
 
-    def parts = raw.split("\\|", 2)
+    def parts = rawLine.split("\\|", 2)
     if (!parts[0]?.trim()) {
-        html += "<div style=\"color:red\">Invalid entry: '${escape(raw)}'</div>"
+        html += "<div style=\"color:red\">Invalid entry: '${escape(rawLine)}'</div>"
         return
     }
 
@@ -87,18 +83,14 @@ if (options.isEmpty()) {
     return "<div style=\"color:red\"><b>Error:</b> No valid operations found.</div>"
 }
 
-// Build <select> element
 html += "<select name='value'>"
 options.eachWithIndex { opt, idx ->
-    if (idx == 0) {
-        html += "<option selected value='${opt.value}'>${opt.label}</option>"
-    } else {
-        html += "<option value='${opt.value}'>${opt.label}</option>"
-    }
+    html += "<option${idx == 0 ? ' selected' : ''} value='${opt.value}'>${opt.label}</option>"
 }
 html += "</select>"
 
 return html
+
       """,
       sandbox: false
     ],
