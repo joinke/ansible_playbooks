@@ -10,7 +10,7 @@ pipeline {
                     def data = readJSON text: env.RAW_JSON
                     def command = data.command
                     def options = data.options
-                    def envs = data.envs
+                    def envs = data.environments
 
                     echo "Command: ${command}"
                     echo "Options: ${options}"
