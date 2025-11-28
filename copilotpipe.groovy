@@ -17,7 +17,7 @@ def notifyStage(jobid,stage, status, message) {
 
 def sendLog() {
     def payload = """{
-        "job_id":${jobid}",
+        "job_id":"${jobid}",
         "log":"${env.result}"
     }"""
     sh """
