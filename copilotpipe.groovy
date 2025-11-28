@@ -21,7 +21,7 @@ pipeline {
         RAW_JSON = "${raw_content}"  // raw JSON from webhook
     }
     stages {
-        stage('Parse JSON') {
+        stage('Stage1:Parse JSON') {
             steps {
                 script {
                     def data = readJSON text: env.RAW_JSON
