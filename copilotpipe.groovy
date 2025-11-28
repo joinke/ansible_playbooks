@@ -21,7 +21,7 @@ def sendLog() {
         "log":"${env.result}"
     }"""
     sh """
-        curl -X POST -H "Content-Type: text/plain" \
+        curl -X POST -H "Content-Type: application/json" \
         -d '${payload}' http://localhost:5000/logs
     """
 }
