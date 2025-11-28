@@ -41,7 +41,7 @@ pipeline {
                     env.result = ''
                     
                     env.result = sh(
-                        script """
+                        script: """
                             echo "Command: ${command}"
                             echo "Options: ${options}"
                             echo "Environments: ${envs}"
