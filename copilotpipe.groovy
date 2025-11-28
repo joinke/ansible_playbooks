@@ -40,12 +40,15 @@ pipeline {
                     env.jobid = job_id
                     env.result = ''
                     
-                    env.result = sh(script '''
-                        echo "Command: ${command}"
-                        echo "Options: ${options}"
-                        echo "Environments: ${envs}"
-                        echo "ID: ${job_id}"
-                    ''', returnStdOut: true).trim()
+                    env.result = sh(
+                        script """
+                            echo "Command: ${command}"
+                            echo "Options: ${options}"
+                            echo "Environments: ${envs}"
+                            echo "ID: ${job_id}"
+                        """, 
+                        returnStdout: true
+                    ).trim()
 
                     if (command == 'deploy') {
                         echo "Deploying to: ${options}"
