@@ -16,13 +16,14 @@ def notifyStage(jobid,stage, status, message) {
 }
 
 def sendLog() {
-    def payload = """ {
+    def payload = """{
         "job_id":${jobid}",
         "log":"${env.result}"
     }"""
     sh """
-        curl -X POST -H "Content-Type: application/json" \
-        -d '${payload}' http://localhost:5000/logs
+        curl -X POST -H 'Content-Type: application/json' \
+        -d '${payload}' \
+        http://localhost:5000/logs
     """
 }
 
