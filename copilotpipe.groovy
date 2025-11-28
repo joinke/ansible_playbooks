@@ -1,3 +1,18 @@
+def notifyStage(jobid,stage, status, message) {
+    def payload = """{
+        "job_id": "${jobid}",
+        "stage": "${stage}",
+        "status": "${status}",
+        "message": "${message}"
+    }"""
+
+    sh """
+    curl -X POST -H 'Content-Type: application/json' \
+         -d '${payload}' \
+         http://localhost:5000/update-status
+    """
+}
+
 pipeline {
     agent any
     environment {
@@ -11,10 +26,13 @@ pipeline {
                     def command = data.command
                     def options = data.options
                     def envs = data.environments
-
+                    def job_id = data.job_id
+                    env.jobid = job_id
+                    
                     echo "Command: ${command}"
                     echo "Options: ${options}"
                     echo "Environments: ${envs}"
+                    echo "ID: ${job_id}"
 
                     if (command == 'deploy') {
                         echo "Deploying to: ${options}"
@@ -25,4 +43,16 @@ pipeline {
             }
         }
     }
+    post {
+    failure {
+        script {
+            notifyStage(env.jobid,"Pipeline", "failed", "Pipeline failed")
+        }
+    }
+    success {
+        script {
+            notifyStage(env.jobid,"Pipeline", "success", "Pipeline completed successfully")
+        }
+    }
+}
 }
