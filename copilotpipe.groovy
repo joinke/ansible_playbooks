@@ -18,7 +18,7 @@ def notifyStage(jobid,stage, status, message) {
 def sendLog() {
     def payload = """{
         "job_id":"${jobid}",
-        "log":"${env.result}"
+        "log":'${env.result}'
     }"""
     sh """
         curl -X POST -H 'Content-Type: application/json' \
