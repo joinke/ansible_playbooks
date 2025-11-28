@@ -39,6 +39,7 @@ pipeline {
                     } else if (command == 'test') {
                         echo "Testing types: ${options}"
                     }
+                    notifyStage(env.jobid,"Parse JSON","success","Stage completed successfully")
                 }
             }
         }
