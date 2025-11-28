@@ -3,7 +3,8 @@ def notifyStage(jobid,stage, status, message) {
         "job_id": "${jobid}",
         "stage": "${stage}",
         "status": "${status}",
-        "message": "${message}"
+        "message": "${message}",
+        "build_number": "${env.BUILD_NUMBER}"
     }"""
 
     sh """
