@@ -16,10 +16,13 @@ def notifyStage(jobid,stage, status, message) {
 }
 
 def sendLog() {
-    def logUrl = "${env.BUILD_URL}consoleText"
+    def payload = """ {
+        "job_id":${jobid}",
+        "log":"${env.result}"
+    }"""
     sh """
         curl -X POST -H "Content-Type: text/plain" \
-        -d "${env.result}" http://localhost:5000/logs
+        -d '${payload}' http://localhost:5000/logs
     """
 }
 
