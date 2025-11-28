@@ -15,13 +15,22 @@ def notifyStage(jobid,stage, status, message) {
     """
 }
 
+def sendLog() {
+    def logUrl = "${env.BUILD_URL}consoleText"
+    sh """
+        curl -s ${logUrl} | \
+        curl -X POST -H "Content-Type: text/plain" \
+        -d @- http://localhost:5000/logs
+    """
+}
+
 pipeline {
     agent any
     environment {
         RAW_JSON = "${raw_content}"  // raw JSON from webhook
     }
     stages {
-        stage('Stage1:Parse JSON') {
+        stage('Parse JSON') {
             steps {
                 script {
                     def data = readJSON text: env.RAW_JSON
@@ -42,6 +51,13 @@ pipeline {
                         echo "Testing types: ${options}"
                     }
                     notifyStage(env.jobid,"Parse JSON","success","Stage completed successfully")
+                }
+            }
+        }
+        stage('Send Logs') {
+            steps {
+                script {
+                    sendLog()
                 }
             }
         }
