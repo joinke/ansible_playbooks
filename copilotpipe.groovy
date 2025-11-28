@@ -18,9 +18,8 @@ def notifyStage(jobid,stage, status, message) {
 def sendLog() {
     def logUrl = "${env.BUILD_URL}consoleText"
     sh """
-        curl -s ${logUrl} | \
         curl -X POST -H "Content-Type: text/plain" \
-        -d @- http://localhost:5000/logs
+        -d "${env.result}" http://localhost:5000/logs
     """
 }
 
@@ -39,11 +38,14 @@ pipeline {
                     def envs = data.environments
                     def job_id = data.job_id
                     env.jobid = job_id
+                    env.result = ''
                     
-                    echo "Command: ${command}"
-                    echo "Options: ${options}"
-                    echo "Environments: ${envs}"
-                    echo "ID: ${job_id}"
+                    env.result = sh(script '''
+                        echo "Command: ${command}"
+                        echo "Options: ${options}"
+                        echo "Environments: ${envs}"
+                        echo "ID: ${job_id}"
+                    ''', returnStdOut: true).trim()
 
                     if (command == 'deploy') {
                         echo "Deploying to: ${options}"
