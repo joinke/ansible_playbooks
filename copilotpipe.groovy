@@ -64,7 +64,7 @@ pipeline {
             steps {
                 script {
                     env.result = sh(script: 'cat /opt/ansible_hosts', returnStdout: true).trim()
-                    notifyStage(env.jobid,"Get Jobs","success","Stage completed successfully")
+                    notifyStage(env.jobid,"Get Jobs","success","$env.result")
                 }
             }
         }
@@ -72,7 +72,7 @@ pipeline {
             steps {
                 script {
                     sendLog()
-                    notifyStage(env.jobid,"Send Logs","success","Stage completed successfully")
+                    notifyStage(env.jobid,"Send Logs","success","Send Logs done")
                 }
             }
         }
@@ -85,7 +85,7 @@ pipeline {
     }
     success {
         script {
-            notifyStage(env.jobid,"Pipeline", "success", "Pipeline completed successfully")
+            notifyStage(env.jobid,"Pipeline", "success", "Post completed successfully")
         }
     }
 }
