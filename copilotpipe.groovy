@@ -9,6 +9,7 @@ def notifyStage(jobid, stage, status, message) {
     ]
     writeFile file: 'payload.json', text: JsonOutput.toJson(payload)
     sh "curl -s -X POST -H 'Content-Type: application/json' -d @payload.json http://localhost:5000/update-status"
+    sh "rm -f payload.json"
 }
 def sendLog() {
     def payload = [
@@ -17,6 +18,7 @@ def sendLog() {
     ]
     writeFile file: 'payload.json', text: groovy.json.JsonOutput.toJson(payload)
     sh "curl -s -X POST -H 'Content-Type: application/json' -d @payload.json http://localhost:5000/logs"
+    sh "rm -f payload.json"
 }
 
 pipeline {
