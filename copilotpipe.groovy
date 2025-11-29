@@ -63,7 +63,7 @@ pipeline {
         stage('Get Jobs') {
             steps {
                 script {
-                    env.result = sh(script: 'cat /opt/jobs.yml', returnStdout: true).trim()
+                    env.result = sh(script: 'cat /opt/ansible_hosts', returnStdout: true).trim()
                     notifyStage(env.jobid,"Get Jobs","success","Stage completed successfully")
                 }
             }
