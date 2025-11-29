@@ -1,20 +1,15 @@
-def notifyStage(jobid,stage, status, message) {
-    def payload = """{
-        "job_id": "${jobid}",
-        "stage": "${stage}",
-        "status": "${status}",
-        "message": "${message}",
-        "build_number": "${env.BUILD_NUMBER}",
-        "job_name": "${env.JOB_NAME}"      
-    }"""
-
-    sh """
-    curl -X POST -H 'Content-Type: application/json' \
-         -d '${payload}' \
-         http://localhost:5000/update-status
-    """
+def notifyStage(jobid, stage, status, message) {
+    def payload = [
+        job_id     : jobid,
+        stage      : stage,
+        status     : status,
+        message    : message,      // safely handle newlines and quotes
+        build_number: env.BUILD_NUMBER,
+        job_name   : env.JOB_NAME
+    ]
+    writeFile file: 'payload.json', text: JsonOutput.toJson(payload)
+    sh "curl -s -X POST -H 'Content-Type: application/json' -d @payload.json http://localhost:5000/update-status"
 }
-
 def sendLog() {
     def payload = [
         job_id: env.jobid,
