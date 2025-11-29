@@ -7,7 +7,7 @@ def notifyStage(jobid, stage, status, message) {
         build_number: env.BUILD_NUMBER,
         job_name   : env.JOB_NAME
     ]
-    writeFile file: 'payload.json', text: JsonOutput.toJson(payload)
+    writeFile file: 'payload.json', text: groovy.json.JsonOutput.toJson(payload)
     sh "curl -s -X POST -H 'Content-Type: application/json' -d @payload.json http://localhost:5000/update-status"
     sh "rm -f payload.json"
 }
