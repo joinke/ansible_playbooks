@@ -16,15 +16,12 @@ def notifyStage(jobid,stage, status, message) {
 }
 
 def sendLog() {
-    def payload = """{
-        "job_id":"${jobid}",
-        "log": "${env.result.replace('"','\\"').replace('\n','\\n')}"
-    }"""
-    sh """
-        curl -X POST -H 'Content-Type: application/json' \
-        -d '${payload}' \
-        http://localhost:5000/logs
-    """
+    def payload = [
+        job_id: env.jobid,
+        log   : env.result
+    ]
+    writeFile file: 'payload.json', text: groovy.json.JsonOutput.toJson(payload)
+    sh "curl -s -X POST -H 'Content-Type: application/json' -d @payload.json http://localhost:5000/logs"
 }
 
 pipeline {
