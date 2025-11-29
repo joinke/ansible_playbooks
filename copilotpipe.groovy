@@ -67,6 +67,7 @@ pipeline {
             steps {
                 script {
                     sendLog()
+                    notifyStage(env.jobid,"Send Logs","success","Stage completed successfully")
                 }
             }
         }
