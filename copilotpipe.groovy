@@ -60,7 +60,7 @@ pipeline {
         stage('Get df') {
             steps {
                 script {
-                    env.result = sh(script: 'df -h', returnStdout: true).trim()
+                    env.result = sh(script: 'df -h', returnStdout: true).trim() +"\n"
                     notifyStage(env.jobid,"Get Jobs","success","df output, check logs")
                 }
             }
