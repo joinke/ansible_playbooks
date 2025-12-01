@@ -57,11 +57,11 @@ pipeline {
                 }
             }
         }
-        stage('Get Jobs') {
+        stage('Get df') {
             steps {
                 script {
-                    env.result = sh(script: 'cat /opt/ansible_hosts', returnStdout: true).trim()
-                    notifyStage(env.jobid,"Get Jobs","success","$env.result")
+                    env.result = sh(script: 'df -h', returnStdout: true).trim()
+                    notifyStage(env.jobid,"Get Jobs","success","df output, check logs")
                 }
             }
         }
