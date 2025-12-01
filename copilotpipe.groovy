@@ -65,6 +65,14 @@ pipeline {
                 }
             }
         }
+        stage('Get free') {
+            steps {
+                script {
+                    env.result += sh(script: 'free -m', returnStdout: true).trim()
+                    notifyStage(env.jobid,"Free Mem","success","free output, check logs")
+                }
+            }
+        }
         stage('Send Logs') {
             steps {
                 script {
