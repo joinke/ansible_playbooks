@@ -60,7 +60,7 @@ pipeline {
         stage('Get df') {
             steps {
                 script {
-                    env.result = sh(script: 'echo -n "-----GET DF----";df -h', returnStdout: true).trim() +"\n"
+                    env.result = sh(script: 'echo -n "-----DF----\n";df -h', returnStdout: true).trim() +"\n"
                     notifyStage(env.jobid,"Get Jobs","success","df output, check logs")
                 }
             }
@@ -68,7 +68,7 @@ pipeline {
         stage('Get free') {
             steps {
                 script {
-                    env.result += sh(script: 'free -m', returnStdout: true).trim()
+                    env.result += sh(script: 'echo -n "-----FREE----\n";free -m', returnStdout: true).trim()
                     notifyStage(env.jobid,"Free Mem","success","free output, check logs")
                 }
             }
