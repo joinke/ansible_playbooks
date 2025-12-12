@@ -10,7 +10,7 @@ pipeline {
         stage("Run Ansible Pipeline") {
             steps {
                 sh """
-                    python3 my_playbook.py
+                    python3 /opt/my_playbook.py
                 """
             }
         }
